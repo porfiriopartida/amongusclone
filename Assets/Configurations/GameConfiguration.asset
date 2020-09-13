@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d73eaa28ff7a425e83381adb42b4a85f, type: 3}
+  m_Name: GameConfiguration
+  m_EditorClassIdentifier: 
+  IsDebug: 1
+  DebugImpostors: 00000000
+  TotalImpostors: 1
+  MovSpeed: 1
+  VoteTime: 95
+  VisionRange: 1
+  ImpostorVisionRange: 1.25
+  KillCooldown: 5
+  LongTask: 0
+  MidTask: 0
+  ShortTask: 1
