@@ -13,7 +13,6 @@ public class VotingEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
     public GameObject BodyFoundPanel;
     public GameObject EmergencyButtonPressedAlert;
     private bool _processing = false;
-    public GameEvent HardEvent;
     public void OnEvent(EventData photonEvent)
     {
         byte code = photonEvent.Code;
@@ -146,7 +145,6 @@ public class VotingEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     private IEnumerator ShowVotingScreen()
     {
-        HardEvent.Raise();
         yield return new WaitForSeconds(2);
         BodyFoundPanel.SetActive(false);
         EmergencyButtonPressedAlert.SetActive(false);

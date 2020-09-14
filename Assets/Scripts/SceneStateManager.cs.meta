@@ -3,7 +3,16 @@ guid: 2c9fd1767894ce54db1758570e572cfa
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - CooldownManager: {instanceID: 0}
+  - HardEvent: {fileID: 11400000, guid: 89b7bb5bb6b5556489a89213f9540fee, type: 2}
+  - SceneState: {instanceID: 0}
+  - gameConfiguration: {fileID: 11400000, guid: b9a8bb61d91a59b4dadb6f932ca1cbbf,
+      type: 2}
+  - CharacterColors: {fileID: 11400000, guid: 41debd9ab1de9cc48b4ea47c6b7f1d03, type: 2}
+  - InputController: {instanceID: 0}
+  - Spawn: {instanceID: 0}
+  - NotReportable: {fileID: 11400000, guid: 12c9694ea6a39a24eab887097408f6a7, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

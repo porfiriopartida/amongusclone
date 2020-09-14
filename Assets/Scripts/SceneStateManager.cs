@@ -2,6 +2,7 @@
 using DefaultNamespace;
 using ExitGames.Client.Photon;
 using LopapaGames.Common.Core;
+using LopapaGames.ScriptableObjects;
 using Photon.Pun;
 using Photon.Realtime;
 using PUN;
@@ -10,6 +11,8 @@ using UnityEngine;
 
 public class SceneStateManager : Singleton<SceneStateManager>
 {
+    public CooldownManager CooldownManager;
+    public GameEvent HardEvent;
     public SceneState SceneState;
     public GameConfiguration gameConfiguration;
     public CharacterColors CharacterColors;
@@ -20,16 +23,24 @@ public class SceneStateManager : Singleton<SceneStateManager>
     public static string TAG_PLAYER = "Player";
 
     public GameEvent NotReportable;
+    private MomongoController _momongoController;
+
+    private GameObject[] players;
     public MomongoController MomongoController
     {
+        get => _momongoController;
         set
         {
-            this.InputController = value.GetComponent<InputController>();
+            _momongoController = value;
+            InputController = _momongoController.GetComponent<InputController>();
         }
     }
 
+    public bool IsGameRunning { get; set; }
+
     public void EnteringMiniGame()
     {
+        MomongoController.Stop();
         DisableRegularInput();
     }
 
@@ -112,7 +123,6 @@ public class SceneStateManager : Singleton<SceneStateManager>
     {
         var playerIndex = SceneState.GetPlayerIndex(player);
         SceneState.GetPlayer(player).Color = CharacterColors.colors[playerIndex];
-        Debug.Log(SceneState.GetPlayer(player).Color);
         return SceneState.GetPlayer(player).Color;
     }
     public PlayerWrapper GetPlayerWrapper(Player player)
@@ -148,9 +158,9 @@ public class SceneStateManager : Singleton<SceneStateManager>
         return SceneState.IsAlive(PhotonNetwork.LocalPlayer);
     }
 
-    private GameObject[] players;
     private void HideAllPlayers()
     {
+        HardEvent.Raise();
         players = GameObject.FindGameObjectsWithTag(TAG_PLAYER);
         foreach (var gameObject in players)
         {
@@ -254,8 +264,12 @@ public class SceneStateManager : Singleton<SceneStateManager>
 
     public void AwardProgress()
     {
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(EventsConstants.TASK_COMPLETE, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
+        if (CooldownManager.GetTimer("AwardCooldown") <= 0)
+        {
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            PhotonNetwork.RaiseEvent(EventsConstants.TASK_COMPLETE, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
+            CooldownManager.AddTimer("AwardCooldown", 2);
+        }
     }
 
     public void RemoveAllUsers()

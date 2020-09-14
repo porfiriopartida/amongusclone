@@ -6160,6 +6160,66 @@ Transform:
   m_Father: {fileID: 379742493}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1701940291
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1701940292}
+  - component: {fileID: 1701940294}
+  - component: {fileID: 1701940293}
+  m_Layer: 0
+  m_Name: SabotagesManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1701940292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701940291}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1914198511}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1701940293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701940291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0920c35fe632bdb489607d2f5c985f84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CooldownManager: {fileID: 3180147962185132121}
+  AreLightsOn: 1
+  IsOxygenOn: 1
+  IsReactorOn: 1
+--- !u!114 &1701940294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701940291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc977e1b5ea9bcb45ac1f08b3f6a52b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1713272202
 GameObject:
   m_ObjectHideFlags: 0
@@ -7035,6 +7095,7 @@ Transform:
   - {fileID: 6149209540245352066}
   - {fileID: 2062443243}
   - {fileID: 1556990736}
+  - {fileID: 1701940292}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7972,6 +8033,21 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1556990737}
+    - target: {fileID: 493180970996941471, guid: 6564e4a2eb5c1674f8129fc13eb6d034,
+        type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 493180970996941471, guid: 6564e4a2eb5c1674f8129fc13eb6d034,
+        type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 493180970996941471, guid: 6564e4a2eb5c1674f8129fc13eb6d034,
+        type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6762370724031970908, guid: 6564e4a2eb5c1674f8129fc13eb6d034,
         type: 3}
       propertyPath: m_Name
@@ -8202,11 +8278,6 @@ PrefabInstance:
       objectReference: {fileID: 298394065868913043}
     - target: {fileID: 2429964036730543945, guid: 912e1e4b91ad48b4a82148df885a8aee,
         type: 3}
-      propertyPath: MiniMap
-      value: 
-      objectReference: {fileID: 1311001859}
-    - target: {fileID: 2429964036730543945, guid: 912e1e4b91ad48b4a82148df885a8aee,
-        type: 3}
       propertyPath: Spawn
       value: 
       objectReference: {fileID: 4285581727066235042}
@@ -8272,6 +8343,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 912e1e4b91ad48b4a82148df885a8aee, type: 3}
+--- !u!114 &3180147962185132121 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6932303773684287636, guid: 912e1e4b91ad48b4a82148df885a8aee,
+    type: 3}
+  m_PrefabInstance: {fileID: 3180147962185132120}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3935df09d45ab8e45bf31aa603148f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3877627257118567838
 MonoBehaviour:
   m_ObjectHideFlags: 0
