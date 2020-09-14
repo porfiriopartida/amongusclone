@@ -42,7 +42,6 @@ namespace DefaultNamespace
 #else
         private void Update()
         {
-
             Vector2 direction = Vector2.zero;
             
             float horizontal = Input.GetAxisRaw("Horizontal");
@@ -75,6 +74,10 @@ namespace DefaultNamespace
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 _momongoController.Sabotage();
+            }
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                UIMapManager.Instance.ToggleMiniMap();
             }
         }
 #endif
