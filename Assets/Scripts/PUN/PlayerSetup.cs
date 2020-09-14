@@ -19,7 +19,6 @@ namespace PUN
         public Canvas Hud;
         private void Start()
         {
-            Debug.Log("PlayerSetup.Start");
             Camera mainCamera = Camera.main;
 
             //Inject color
