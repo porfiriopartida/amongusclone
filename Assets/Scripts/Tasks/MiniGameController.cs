@@ -1,10 +1,12 @@
 ﻿using System;
+using LopapaGames.ScriptableObjects;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
     public abstract class MiniGameController : MonoBehaviour
     {
+        public CooldownManager CooldownManager;
         private TaskInteractable taskInteractable;
         public abstract void StartGame();
 

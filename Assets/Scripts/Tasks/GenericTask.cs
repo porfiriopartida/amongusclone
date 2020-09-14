@@ -9,7 +9,6 @@ namespace Tasks
         public bool IsRunning = false;
         private bool _isWin = false;
         public float Length;
-        public CooldownManager CooldownManager;
         public override void StartGame()
         {
             // OpenGame();
@@ -48,9 +47,6 @@ namespace Tasks
 
                     AwardProgress();
                     CloseGame();
-                    //TODO: Network - Notify Task completed
-                
-                    //Task completed awards points, returns Input Controller and checks win condition.
 
                     IsRunning = false;
                 }
