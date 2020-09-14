@@ -22,15 +22,19 @@ public class UIMapManager : Singleton<UIMapManager>
     public void ToggleMiniMap()
     {
         MiniMap.SetActive(!MiniMap.activeSelf);
+        SabotageMap.SetActive(false);
         AdminMiniMap.SetActive(false);
     }
     public void CloseMinimap()
     {
+        SabotageMap.SetActive(false);
+        AdminMiniMap.SetActive(false);
         MiniMap.SetActive(false);
     }
     public void ToggleAdminMiniMap()
     {
         MiniMap.SetActive(false);
+        SabotageMap.SetActive(false);
         AdminMiniMap.SetActive(!AdminMiniMap.activeSelf);
 
         if (AdminMiniMap.activeSelf)
@@ -43,6 +47,8 @@ public class UIMapManager : Singleton<UIMapManager>
     {
         MiniMap.SetActive(false);
         AdminMiniMap.SetActive(false);
+        SabotageMap.SetActive(false);
+        
         SceneStateManager.Instance.EnableRegularInput();
     }
 }
