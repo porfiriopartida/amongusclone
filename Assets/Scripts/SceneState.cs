@@ -37,7 +37,9 @@ public class SceneState : ScriptableObject
     }
     public bool IsImpostor(Player player)
     {
-        return GetPlayer(player).IsImpostor;
+        PlayerWrapper _player = GetPlayer(player);
+
+        return _player != null && _player.IsImpostor;
     }
 
     public void SetImpostor(Player player)
@@ -144,12 +146,19 @@ public class SceneState : ScriptableObject
 
     public void SetIsAlive(Player player, bool isAlive)
     {
-        GetPlayer(player).IsAlive = isAlive;
+        PlayerWrapper _player = GetPlayer(player);
+
+        if (_player != null)
+        {
+            _player.IsAlive = isAlive;
+        }
     }
 
     public bool IsAlive(Player player)
     {
-        return GetPlayer(player).IsAlive && !player.IsInactive;
+        PlayerWrapper _player = GetPlayer(player);
+
+        return _player != null && _player.IsAlive && !player.IsInactive;
     }
 
     public PlayerWrapper FindPlayer(string uuid)
