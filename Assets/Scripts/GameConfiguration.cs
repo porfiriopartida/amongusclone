@@ -48,7 +48,7 @@ public class GameConfiguration : ScriptableObject
     [Min(10)]
     public float KillCooldown = 15;
     // public float SabotageHardCooldown = 15;
-    // public float SabotageLightsCooldown = 15;
+    public int SabotageLightsCooldown = 15;
     // public float SabotageDoorsCooldown = 10;
     
     [Space(5, order = -1)]
@@ -58,15 +58,15 @@ public class GameConfiguration : ScriptableObject
     public int MidTask = 2;
     public int ShortTask = 4;
         
-    // [Space(5, order = -1)]
-    // [Header("- Sabotage Effects")] 
+    [Space(5, order = -1)]
+    [Header("- Sabotage Effects")] 
     // [Min(10)]
     // public float SabotageTimeToDie = 30;
     // [Min(1)]
     // public float SabotageDoorsClosedTime = 5;
-    // [Min(0)]
-    // public float SabotageLightsOffDelay = 5;
-    // public  bool SabotageLightFadeEffect = true;
+    [Min(0)]
+    public float SabotageLightsOffDelay = 5;
+    public  bool SabotageLightFadeEffect = true;
     public Hashtable toHashtable()
     {
         Hashtable hashtable = new Hashtable();
@@ -96,9 +96,8 @@ public class GameConfiguration : ScriptableObject
         int TotalPlayers = PhotonNetwork.PlayerList.Length;
         hashtable.Add("TotalTasks", (LongTask +  MidTask + ShortTask) * (TotalPlayers - TotalImpostors));
         
+        hashtable.Add("SabotageLightsCooldown", SabotageLightsCooldown);
         
-        
-        Debug.Log(hashtable);
         return hashtable;
     }
 }
