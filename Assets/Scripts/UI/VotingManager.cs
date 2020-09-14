@@ -18,6 +18,8 @@ namespace UI
         public GameObject SkipButton;
         public Hashtable Votes;
         private List<string> AlreadyVoted;
+
+        public GameEvent HardEvent;
         // private Dictionary<string, int>
         private bool _isAlive;
         private void Start()
