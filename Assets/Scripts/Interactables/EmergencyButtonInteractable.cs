@@ -6,9 +6,14 @@ using UnityEngine;
 
 public class EmergencyButtonInteractable : UseInteractable
 {
+    private bool CanUse()
+    {
+        return SceneStateManager.Instance.IsAlive() && !SabotagesManager.Instance.IsSabotaged();
+    }
+
     public override void Interact()
     {
-        if (SceneStateManager.Instance.IsAlive())
+        if (CanUse())
         {
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             PhotonNetwork.RaiseEvent(EventsConstants.EmergencyButtonPressed, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
