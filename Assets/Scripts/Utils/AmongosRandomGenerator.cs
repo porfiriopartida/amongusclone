@@ -22,6 +22,11 @@ namespace DefaultNamespace.Utils
                 {
                     selectedList.Add(playerId);
                 }
+
+                if (selectedList.Count == playerList.Length)
+                {
+                    break;
+                }
             }
             return selectedList.ToArray();
         }
