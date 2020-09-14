@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Realtime;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
@@ -7,19 +8,19 @@ namespace UI
     {
         public Image Reporter;
         public Image Body;
-        public void SetFounder(PlayerWrapper reporter)
+        public void SetFounder(Player reporter)
         {
             if (reporter != null)
             {
-                Reporter.color = reporter.Color;
+                Reporter.color = SceneStateManager.Instance.GetColor(reporter);
             }
         }
 
-        public void SetBody(PlayerWrapper body)
+        public void SetBody(Player body)
         {
             if (body != null)
             {
-                Body.color = body.Color;
+                Body.color = SceneStateManager.Instance.GetColor(body);
             }
         }
     }

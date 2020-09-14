@@ -1,5 +1,4 @@
 ﻿using LopapaGames.ScriptableObjects;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +15,6 @@ public class HudUIManager : MonoBehaviour
     void Start()
     {
         SetCanUse(false);
-        SetCanSabotage(false);
         SetCanReport(false);
         SetCanKill(false);
         SetIsImpostor(SceneStateManager.Instance.IsImpostor());
@@ -30,10 +28,6 @@ public class HudUIManager : MonoBehaviour
     public void SetCanUse(bool canUse)
     {
         UseButton.SetActive(canUse);
-    }
-    public void SetCanSabotage(bool canUse)
-    {
-        SabotageButton.SetActive(canUse);
     }
     public void SetCanReport(bool canUse)
     {

@@ -8,11 +8,10 @@ using UnityEngine.SceneManagement;
 
 namespace PUN
 {
-    public class GameSceneManager : MonoBehaviourPunCallbacks
+    public class GameSceneManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         public static GameSceneManager Instance;
         public GameObject playerPrefab;
-        public GameObject Spawn;
         public GameObject Authoritative;
         public GameObject _networkLaunchManager;
         private void Awake()
@@ -33,7 +32,10 @@ namespace PUN
         {
             if (PhotonNetwork.IsConnected)
             {
-                SpawnMe();
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    SpawnCharacters();
+                }
                 ResetTasks();
             }
             #if UNITY_EDITOR
@@ -42,6 +44,20 @@ namespace PUN
                 _networkLaunchManager.SetActive(true);
             }
             #endif
+        }
+
+        private void SpawnCharacters()
+        {           
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            PhotonNetwork.RaiseEvent(EventsConstants.GAME_STARTED, null, raiseEventOptions, SendOptions.SendReliable);
+        }
+
+        public void OnEvent(EventData photonEvent)
+        {
+            if (photonEvent.Code == EventsConstants.GAME_STARTED)
+            {
+                SpawnMe();
+            }
         }
 
         public Float Progress;
@@ -60,7 +76,6 @@ namespace PUN
         public void SpawnMe()
         {
             GameObject spawnedObject = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
-            spawnedObject.transform.parent = Spawn.transform;
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -75,7 +90,7 @@ namespace PUN
         
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            SceneStateManager.Instance.RemovePlayer(otherPlayer);
+            // SceneStateManager.Instance.RemovePlayer(otherPlayer);
         }
 
         #region PUN

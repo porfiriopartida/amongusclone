@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73eaa28ff7a425e83381adb42b4a85f, type: 3}
   m_Name: GameConfiguration
   m_EditorClassIdentifier: 
-  IsDebug: 1
+  IsDebug: 0
   DebugImpostors: 00000000
   TotalImpostors: 1
-  MovSpeed: 1
-  VoteTime: 95
-  VisionRange: 1
-  ImpostorVisionRange: 1.25
-  KillCooldown: 5
-  LongTask: 0
-  MidTask: 0
-  ShortTask: 1
+  MovSpeed: 0.75
+  VoteTime: 90
+  VisionRange: 0.75
+  ImpostorVisionRange: 1
+  KillCooldown: 15
+  LongTask: 2
+  MidTask: 2
+  ShortTask: 3

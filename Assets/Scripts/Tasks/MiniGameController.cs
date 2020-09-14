@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LopapaGames.ScriptableObjects;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
     public abstract class MiniGameController : MonoBehaviour
     {
+        public CooldownManager CooldownManager;
         private TaskInteractable taskInteractable;
         public abstract void StartGame();
 
@@ -30,8 +31,8 @@ namespace DefaultNamespace
         public virtual void AwardProgress()
         {
             Debug.Log("Awarding progress for mini game " + gameObject.name);
-            SceneStateManager.Instance.AwardProgress();
             Destroy(taskInteractable.gameObject, .5f);
+            SceneStateManager.Instance.AwardProgress();
         }
         
         #region Events

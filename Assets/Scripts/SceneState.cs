@@ -1,43 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DefaultNamespace;
+using ExitGames.Client.Photon;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Momongos/SceneState")]
 public class SceneState : ScriptableObject
 {
-    private List<PlayerWrapper> playerWrapper;
-
-    public List<PlayerWrapper> GetPlayers()
-    {
-        return playerWrapper;
-    }
-    //public PlayerConfiguration playerConfiguration;
-    //public ImpostorConfiguration impostorConfiguration;
-    //public MapConfiguration mapConfiguration;
-
-    public void SetPlayers(Player[] players)
-    {
-        playerWrapper = new List<PlayerWrapper>();
-        for (var index = 0; index < players.Length; index++)
-        {
-            var player = players[index];
-           // bool isImpostor = impostors.Contains(index);
-            playerWrapper.Add(PlayerWrapper.Build(player));
-        }
-    }
-
+    public CharacterColors CharacterColors;
     public void ResetPlayers()
     {
-        foreach (var _playerWrapper in playerWrapper)
+        Player[] players = PhotonNetwork.PlayerList;
+        for (var index = 0; index < players.Length; index++)
         {
-            _playerWrapper.IsImpostor = false;
-            _playerWrapper.IsAlive = true;
+            var currentPlayer = players[index];
+            SetCustomProperties(currentPlayer);
         }
     }
+
+    private void SetCustomProperties(Player player)
+    {
+        Hashtable hashtable = new Hashtable();
+        int idx = -1;
+        if (player.CustomProperties.TryGetValue(CustomProperties.PLAYER_COLOR, out var val))
+        {
+            idx = (int) val;
+        }
+        else
+        {
+            idx = player.ActorNumber;
+        }
+
+
+        hashtable[CustomProperties.IS_IMPOSTOR] = false;
+        hashtable[CustomProperties.IS_ALIVE] = true;
+        hashtable[CustomProperties.PLAYER_COLOR] = idx;
+
+        player.SetCustomProperties(hashtable);
+    }
+    
     public bool IsImpostor(Player player)
     {
-        return GetPlayer(player).IsImpostor;
+        return player != null && !player.IsInactive && (bool)player.CustomProperties[CustomProperties.IS_IMPOSTOR];
     }
 
     public void SetImpostor(Player player)
@@ -47,62 +52,58 @@ public class SceneState : ScriptableObject
             return;
         }
         
-        PlayerWrapper playerWrapper = GetPlayer(player);
-        if (playerWrapper != null)
-        {
-            playerWrapper.IsImpostor = true;
-        }
-    }
-    
-    
-    public void SetColor(Player player, Color color)
-    {
-        if (player == null)
-        {
-            return;
-        }
+        player.CustomProperties[CustomProperties.IS_IMPOSTOR] = true;
         
-        PlayerWrapper playerWrapper = GetPlayer(player);
-        if (playerWrapper != null)
+        player.SetCustomProperties(player.CustomProperties);
+    }
+
+
+    public void SetColor(Player player, int idx)
+    {
+        RaiseEventOptions _raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
+        PhotonNetwork.RaiseEvent(EventsConstants.SELECT_COLOR, new string[2]{ player.UserId, idx.ToString()}, _raiseEventOptions, SendOptions.SendReliable);
+    }
+    
+    public Color GetColor(Player player)
+    {
+        int idx = GetColorIdx(player);
+        if (idx == -1)
         {
-            playerWrapper.Color = color;
+            return Color.white;
         }
+        Color c = CharacterColors.colors[idx];
+        return c;
     }
-
-    public PlayerWrapper GetPlayer(Player player)
+    public int GetColorIdx(Player player)
     {
-        foreach (var _playerWrapper in playerWrapper)
+        var obj = player.CustomProperties[CustomProperties.PLAYER_COLOR];
+        if (obj == null)
         {
-            if (_playerWrapper.Player.UserId.Equals(player.UserId))
-            {
-                return _playerWrapper;
-            }
+            return -1;
+        }
+        return (int)obj;
+    }
+
+    public List<int> GetTakenColors()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+        List<int> colors = new List<int>();
+        foreach (var player in players)
+        {
+            colors.Add(GetColorIdx(player));
         }
 
-        return null;
-    }
-
-    public void Clear()
-    {
-        playerWrapper = new List<PlayerWrapper>();
-    }
-
-    public void AddPlayer(Player player)
-    {
-        playerWrapper.Add(PlayerWrapper.Build(player));
-    }
-
-    public void RemovePlayer(Player player)
-    {
-        playerWrapper.Remove(GetPlayer(player));
+        return colors;
     }
 
     public int GetImpostorsCount()
     {
         int c = 0;
-        foreach (var wrapper in playerWrapper)
+        Player[] players = PhotonNetwork.PlayerList;
+        for (var index = 0; index < players.Length; index++)
         {
-            if (wrapper.IsImpostor && wrapper.IsAlive)
+            var currentPlayer = players[index];
+            if ((bool)currentPlayer.CustomProperties[CustomProperties.IS_ALIVE] && (bool)currentPlayer.CustomProperties[CustomProperties.IS_IMPOSTOR])
             {
                 c++;
             }
@@ -113,9 +114,11 @@ public class SceneState : ScriptableObject
     public int GetCrewmateCount()
     {
         int c = 0;
-        foreach (var wrapper in playerWrapper)
+        Player[] players = PhotonNetwork.PlayerList;
+        for (var index = 0; index < players.Length; index++)
         {
-            if (!wrapper.IsImpostor && wrapper.IsAlive)
+            var currentPlayer = players[index];
+            if ((bool)currentPlayer.CustomProperties[CustomProperties.IS_ALIVE] && !((bool)currentPlayer.CustomProperties[CustomProperties.IS_IMPOSTOR]))
             {
                 c++;
             }
@@ -126,10 +129,11 @@ public class SceneState : ScriptableObject
 
     public int GetPlayerIndex(Player player)
     {
-        for (var index = 0; index < playerWrapper.Count; index++)
+        Player[] players = PhotonNetwork.PlayerList;
+        for (var index = 0; index < players.Length; index++)
         {
-            var wrapper = playerWrapper[index];
-            if (player.UserId.Equals(wrapper.Player.UserId))
+            var currentPlayer = players[index];
+            if (currentPlayer.UserId.Equals(player.UserId))
             {
                 return index;
             }
@@ -139,24 +143,31 @@ public class SceneState : ScriptableObject
 
     public void SetIsAlive(Player player, bool isAlive)
     {
-        GetPlayer(player).IsAlive = isAlive;
+        if (player != null)
+        {
+            player.CustomProperties[CustomProperties.IS_ALIVE] = isAlive;
+            player.SetCustomProperties(player.CustomProperties);
+        }
     }
 
     public bool IsAlive(Player player)
     {
-        return GetPlayer(player).IsAlive && !player.IsInactive;
+        return player != null && !player.IsInactive && (bool)player.CustomProperties[CustomProperties.IS_ALIVE];
     }
 
-    public PlayerWrapper FindPlayer(string uuid)
+
+    public Player FindPlayer(string uuid)
     {
-        for (var index = 0; index < playerWrapper.Count; index++)
+        Player[] players = PhotonNetwork.PlayerList;
+        for (var index = 0; index < players.Length; index++)
         {
-            var wrapper = playerWrapper[index];
-            if (uuid.Equals(wrapper.Player.UserId))
+            var currentPlayer = players[index];
+            if (uuid.Equals(currentPlayer.UserId))
             {
-                return wrapper;
+                return currentPlayer;
             }
         }
+        
         return null;
     }
 
@@ -169,21 +180,12 @@ public class SceneState : ScriptableObject
     {
         return 0;
     }
+    
 }
 
-[Serializable]
-public class PlayerWrapper
+public class CustomProperties
 {
-    public Player Player;
-    public bool IsImpostor;
-    public bool IsAlive;
-    public Color Color { get; set; }
-
-    public static PlayerWrapper Build(Player player)
-    {
-        PlayerWrapper playerWrapper = new PlayerWrapper();
-        playerWrapper.Player = player;
-        playerWrapper.IsAlive = true;
-        return playerWrapper;
-    }
+    public const string IS_ALIVE = "IsAlive";
+    public const string IS_IMPOSTOR = "IsImpostor";
+    public const string PLAYER_COLOR = "Color";
 }

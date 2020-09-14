@@ -2,6 +2,7 @@
 using DefaultNamespace;
 using ExitGames.Client.Photon;
 using LopapaGames.Common.Core;
+using LopapaGames.ScriptableObjects;
 using Photon.Pun;
 using Photon.Realtime;
 using PUN;
@@ -10,46 +11,58 @@ using UnityEngine;
 
 public class SceneStateManager : Singleton<SceneStateManager>
 {
+    public CooldownManager CooldownManager;
+    public GameEvent HardEvent;
     public SceneState SceneState;
     public GameConfiguration gameConfiguration;
-    public CharacterColors CharacterColors;
+    // public CharacterColors CharacterColors;
+    // public ColorPlayer ColorPlayer;
     public InputController InputController;
 
+    public GameObject Spawn;
+    
     public static string TAG_PLAYER = "Player";
 
     public GameEvent NotReportable;
+    private MomongoController _momongoController;
+
+    private GameObject[] players;
     public MomongoController MomongoController
     {
+        get => _momongoController;
         set
         {
-            this.InputController = value.GetComponent<InputController>();
+            _momongoController = value;
+            InputController = _momongoController.GetComponent<InputController>();
         }
     }
 
+    public bool IsGameRunning { get; set; }
+    public int EmergencyCount = 0;
+
     public void EnteringMiniGame()
     {
+        MomongoController.Stop();
+        MomongoController.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         DisableRegularInput();
     }
 
-    private void DisableRegularInput()
+    public void DisableRegularInput()
     {
         InputController.enabled = false;
     }
 
-    private void EnableRegularInput()
+    public void EnableRegularInput()
     {
         InputController.enabled = true;
+        MomongoController.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
     }
 
     public void LeavingMiniGame()
     {
-        InputController.enabled = true;
+        EnableRegularInput();
     }
-
-    public void SetPlayers(Player[] players)
-    {
-        SceneState.SetPlayers(players);
-    }
+    
     public void SetImpostor(Player player)
     {
         SceneState.SetImpostor(player);
@@ -59,27 +72,13 @@ public class SceneStateManager : Singleton<SceneStateManager>
         SceneState.ResetPlayers();
     }
 
-    public void AddPlayer(Player player)
-    {
-        SceneState.AddPlayer(player);
-    }
-
-    public void RemovePlayer(Player player)
-    {
-        SceneState.RemovePlayer(player);
-    }
-
-    public void Clear()
-    {
-        SceneState.Clear();
-    }
-
     public bool IsImpostor(Player localPlayer)
     {
         return SceneState.IsImpostor(localPlayer);
     }
     public bool IsImpostor()
     {
+        //TODO: Cache LocalPlayer
         return SceneState.IsImpostor(PhotonNetwork.LocalPlayer);
     }
 
@@ -107,15 +106,30 @@ public class SceneStateManager : Singleton<SceneStateManager>
 
     public Color GetColor(Player player)
     {
-        var playerIndex = SceneState.GetPlayerIndex(player);
-        SceneState.GetPlayer(player).Color = CharacterColors.colors[playerIndex];
-        Debug.Log(SceneState.GetPlayer(player).Color);
-        return SceneState.GetPlayer(player).Color;
+        return SceneState.GetColor(player);
     }
-    public PlayerWrapper GetPlayerWrapper(Player player)
+    public int GetColorIdx(Player player)
     {
-        return SceneState.GetPlayer(player);
+        return SceneState.GetColorIdx(player);
     }
+    public List<int> GetTakenColors()
+    {
+        return SceneState.GetTakenColors();
+    }
+
+    public void SetColor(Player player, int idx)
+    {
+        Debug.Log("Assigning color to " + player.NickName + ":" + idx);
+        SceneState.SetColor(player, idx);
+    }
+    
+    
+
+    // public void SetColor(Player player)
+    // {
+    //     var playerIndex = SceneState.GetPlayerIndex(player);
+    //     SetColor(player, playerIndex);
+    // }
 
     public void SyncGhosts()
     {
@@ -130,6 +144,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
             bool isEnabled = (owner.IsLocal || !isLocalPlayerAlive || isRemotePlayerAlive);
            
             momongoController.GetComponent<SpriteRenderer>().enabled = isEnabled;
+            momongoController.AdminSprite.GetComponent<SpriteRenderer>().enabled = isEnabled;
             momongoController.GetComponent<PlayerSetup>().PlayerNamePanel.SetActive(isEnabled);
         }
     }
@@ -143,22 +158,26 @@ public class SceneStateManager : Singleton<SceneStateManager>
     {
         return SceneState.IsAlive(PhotonNetwork.LocalPlayer);
     }
+    public bool IsAlive(Player player)
+    {
+        return SceneState.IsAlive(player);
+    }
 
-    private GameObject[] players;
     private void HideAllPlayers()
     {
+        HardEvent.Raise();
         players = GameObject.FindGameObjectsWithTag(TAG_PLAYER);
-        foreach (var gameObject in players)
+        foreach (var _gameObject in players)
         {
-            gameObject.SetActive(false);
+            _gameObject.SetActive(false);
         }
     }
 
     private void ShowAllPlayers()
     {
-        foreach (var gameObject in players)
+        foreach (var _gameObject in players)
         {
-            gameObject.SetActive(true);
+            _gameObject.SetActive(true);
         }
     }
 
@@ -190,12 +209,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
         }
     }
 
-    public List<PlayerWrapper> GetPlayers()
-    {
-        return SceneState.GetPlayers();
-    }
-
-    public PlayerWrapper FindPlayer(string uuid)
+    public Player FindPlayer(string uuid)
     {
         return SceneState.FindPlayer(uuid);
     }
@@ -216,7 +230,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
         {
             MomongoController momongoController = deadPlayer.GetComponent<MomongoController>();
             Player player = momongoController.photonView.Owner;
-            if (!GetPlayerWrapper(player).IsAlive)
+            if (!IsAlive(player))
             {
                 momongoController.GhostMe();
             }
@@ -237,7 +251,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
             if ( userId.Equals(uuid))
             {
                 momongoController.Die();
-            } else if (!GetPlayerWrapper(player).IsAlive)
+            } else if (!IsAlive(player))
             {
                 momongoController.GhostMe();
             }
@@ -250,7 +264,19 @@ public class SceneStateManager : Singleton<SceneStateManager>
 
     public void AwardProgress()
     {
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(EventsConstants.TASK_COMPLETE, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
+        if (CooldownManager.GetTimer("AwardCooldown") <= 0)
+        {
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            PhotonNetwork.RaiseEvent(EventsConstants.TASK_COMPLETE, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
+            CooldownManager.AddTimer("AwardCooldown", 2);
+        }
+    }
+
+    public void RemoveAllUsers()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.DestroyAll();
+        }
     }
 }

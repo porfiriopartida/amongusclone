@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class DeadBodyInteractable : ReportInteractable
 {
-    private PlayerWrapper _player;
+    private Player _player;
     
     public override void Interact()
     {
@@ -15,7 +15,7 @@ public class DeadBodyInteractable : ReportInteractable
 
     public void SetPlayer(Player deadPlayer)
     {
-        this._player = SceneStateManager.Instance.GetPlayerWrapper(deadPlayer);
+        this._player = deadPlayer;
     }
 
     public override void Interact(Player player)
@@ -23,14 +23,13 @@ public class DeadBodyInteractable : ReportInteractable
         string bodyNickname = "<PlayerName>";
         if (_player != null)
         {
-            bodyNickname = _player.Player.NickName;
+            bodyNickname = _player.NickName;
         }
         #if UNITY_EDITOR
         else
         {
-            _player = new PlayerWrapper();
-            _player.Color = Color.green;
-            _player.Player = PhotonNetwork.LocalPlayer;
+            _player = PhotonNetwork.LocalPlayer;
+            // SceneStateManager.Instance.SetColor(player, Color.green);
         }
         #endif
 
@@ -38,6 +37,6 @@ public class DeadBodyInteractable : ReportInteractable
         
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
          
-        PhotonNetwork.RaiseEvent(EventsConstants.ReportDead, new string[]{PhotonNetwork.LocalPlayer.UserId, _player.Player.UserId}, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(EventsConstants.REPORT_DEAD, new string[]{PhotonNetwork.LocalPlayer.UserId, _player.UserId}, raiseEventOptions, SendOptions.SendReliable);
     }
 }

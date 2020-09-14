@@ -1,8 +1,11 @@
-﻿public class DeadBodyReport
+﻿using Photon.Pun;
+using Photon.Realtime;
+
+public class DeadBodyReport
 {
-    public PlayerWrapper Reporter;
+    public Player Reporter;
     
-    public PlayerWrapper Body;
+    public Player Body;
     
     
     public DeadBodyReport(string[] uuids)

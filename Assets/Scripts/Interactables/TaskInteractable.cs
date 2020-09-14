@@ -16,7 +16,7 @@ public class TaskInteractable : UseInteractable
     {
         Debug.Log("Interacting as: " + source.name);
         
-        GameObject instantiate = Instantiate(TaskPrefab, source.transform, false);
+        GameObject instantiate = Instantiate(TaskPrefab, source.transform.position, Quaternion.identity);
         MiniGameController MiniGameScreen = instantiate.GetComponent<MiniGameController>();
         MiniGameScreen.SetTrigger(this);
 

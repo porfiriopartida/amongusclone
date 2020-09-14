@@ -1,4 +1,5 @@
 ﻿using System;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,20 +12,20 @@ namespace UI
         public Image PlayerIcon;
         public Text PlayerName;
 
-        private PlayerWrapper _player;
+        private Player _player;
 
         public Sprite DeadSprite;
         public Sprite AliveSprite;
 
         public Button ShowVotingButtonsButton; 
 
-        public void SetPlayer(PlayerWrapper player, bool isAlive)
+        public void SetPlayer(Player player, bool isAlive)
         {
             this._player = player;
-            PlayerIcon.color = player.Color;
+            PlayerIcon.color = SceneStateManager.Instance.GetColor(player);
             
-            PlayerName.text = player.Player.NickName;
-            if (SceneStateManager.Instance.IsImpostor() && player.IsImpostor)
+            PlayerName.text = player.NickName;
+            if (SceneStateManager.Instance.IsImpostor() && SceneStateManager.Instance.IsImpostor(player))
             {
                 PlayerName.color = Color.red;
                 PlayerName.fontStyle = FontStyle.Bold;
@@ -43,9 +44,10 @@ namespace UI
         // If the local Player is dead then they cannot cast votes
         public void InitializeUI(bool isLocalAlive)
         {
-            PlayerIcon.sprite = _player.IsAlive ? AliveSprite : DeadSprite;
+            bool _playerIsAlive = SceneStateManager.Instance.IsAlive(_player);
+            PlayerIcon.sprite = _playerIsAlive ? AliveSprite : DeadSprite;
             
-            if (isLocalAlive && _player.IsAlive)
+            if (isLocalAlive && _playerIsAlive)
             {
                 EnableButton();
             } else {
@@ -85,9 +87,9 @@ namespace UI
 
         public void VoteThis()
         {
-            if (this._player.IsAlive)
+            if (SceneStateManager.Instance.IsAlive(_player))
             {
-                VotingManager.Instance.CastVote(this._player.Player.UserId);
+                VotingManager.Instance.CastVote(this._player.UserId);
             }
         }
 
@@ -98,7 +100,7 @@ namespace UI
                 return;
             }
 
-            if (this._player.Player.UserId.Equals(uuid))
+            if (this._player.UserId.Equals(uuid))
             {
                 this.PlayerVoted.SetActive(true);
             }

@@ -18,6 +18,7 @@ namespace UI
         public GameObject SkipButton;
         public Hashtable Votes;
         private List<string> AlreadyVoted;
+
         // private Dictionary<string, int>
         private bool _isAlive;
         private void Start()
@@ -35,13 +36,11 @@ namespace UI
             {
                 playersPanels = new List<GameObject>();
                 _started = true;
-                List<PlayerWrapper> players = SceneStateManager.Instance.GetPlayers();
+                Player[] players = PhotonNetwork.PlayerList;
                 foreach (var player in players)
                 {
                     playersPanels.Add(DiscussionPanelManager.AddPlayer(player, _isAlive));
                 }
-                //Cannot use with tag if they are disabled.
-                // playersPanels = GameObject.FindGameObjectsWithTag("PlayerVotingPanel");
             }
             EnableVotes();
 
@@ -148,12 +147,12 @@ namespace UI
         public void ShowVoters()
         {
             DisableVotes();
-            List<PlayerWrapper> playerWrappers = SceneStateManager.Instance.GetPlayers();
-            foreach (var playerWrapper in playerWrappers)
+            Player[] players = PhotonNetwork.PlayerList;
+            foreach (var player in players)
             {
-                string currentNickname = playerWrapper.Player.NickName;
+                string currentNickname = player.NickName;
                 object voters;
-                if (Votes.TryGetValue(playerWrapper.Player.UserId, out voters))
+                if (Votes.TryGetValue(player.UserId, out voters))
                 {
                     List<string> voterList = (List<string>) voters;
                     Debug.Log("Users that voted for " + currentNickname + ": ");
@@ -165,15 +164,13 @@ namespace UI
                 }
             }
         }
-        public PlayerWrapper GetMostVoted()
+        public Player GetMostVoted()
         {
-            List<PlayerWrapper> playerWrappers = SceneStateManager.Instance.GetPlayers();
-
             object voters;
             int currentMax = -1;
             bool IsTie = false;
             string currentNickname = "SKIP";
-            PlayerWrapper currentPlayer = null;
+            Player currentPlayer = null;
             if (Votes.TryGetValue("SKIP", out voters))
             {
                 List<string> voterList = (List<string>) voters;
@@ -184,9 +181,10 @@ namespace UI
                 currentMax = 0;
             }
 
-            foreach (var playerWrapper in playerWrappers)
+            Player[] players = PhotonNetwork.PlayerList;
+            foreach (var player in players)
             {
-                if (Votes.TryGetValue(playerWrapper.Player.UserId, out voters))
+                if (Votes.TryGetValue(player.UserId, out voters))
                 {
                     List<string> voterList = (List<string>) voters;
                     if (currentMax == voterList.Count )
@@ -195,9 +193,9 @@ namespace UI
                     }
                     else if(voterList.Count > currentMax)
                     {
-                        currentNickname = playerWrapper.Player.NickName;
+                        currentNickname = player.NickName;
                         currentMax = voterList.Count;
-                        currentPlayer = playerWrapper;
+                        currentPlayer = player;
                         IsTie = false;
                     }
                 }
@@ -210,7 +208,7 @@ namespace UI
                 return null;
             }
 
-            Debug.Log(currentPlayer.Player.NickName + " is getting kicked");
+            Debug.Log(currentPlayer.NickName + " is getting kicked");
             return currentPlayer;
         }
     }

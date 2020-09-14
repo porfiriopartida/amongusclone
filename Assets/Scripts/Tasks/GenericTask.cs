@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using DefaultNamespace;
-using LopapaGames.ScriptableObjects;
+﻿using DefaultNamespace;
 
 namespace Tasks
 {
@@ -9,10 +7,8 @@ namespace Tasks
         public bool IsRunning = false;
         private bool _isWin = false;
         public float Length;
-        public CooldownManager CooldownManager;
         public override void StartGame()
         {
-            // OpenGame();
             ResetState();
         }
 
@@ -26,13 +22,7 @@ namespace Tasks
         {
             _isWin = true;
             CooldownManager.AddTimer("WaitTime", Length);
-            // StartCoroutine(DelayedWin());
         }
-
-        // private IEnumerator DelayedWin()
-        // {
-        //     
-        // }
 
         private void Update()
         {
@@ -48,9 +38,6 @@ namespace Tasks
 
                     AwardProgress();
                     CloseGame();
-                    //TODO: Network - Notify Task completed
-                
-                    //Task completed awards points, returns Input Controller and checks win condition.
 
                     IsRunning = false;
                 }

@@ -9,9 +9,12 @@ using UnityEngine;
 public class MomongoController : MonoBehaviour
 {
     //   private Rigidbody2D _rigidbody;
+    public GameEvent HardEvent;
     public Float MovSpeed;
+    public Float GhostSpeed;
     public Float VisionRange;
     private float RealSpeed;
+    public GameObject MyMapIndicator;
 
     public GameObject VisionMask;
     //private CharacterController _characterController;
@@ -19,9 +22,11 @@ public class MomongoController : MonoBehaviour
     private Vector2 _cacheDirection;
     
     private Rigidbody2D _rigidbody2D;
-
+    [SerializeField]
     private IInteractable _useInteractable;
+    [SerializeField]
     private IInteractable _reportableInteractable;
+    [SerializeField]
     private IInteractable _killable;
 
     public PhotonView photonView;
@@ -33,46 +38,64 @@ public class MomongoController : MonoBehaviour
     public GameEvent SomeoneDiedEvent;
 
     public CooldownManager CooldownManager;
+    public GameObject AdminSprite;
 
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         // photonView = PhotonView.Get(this);
         _animator = GetComponent<Animator>();
+        AdminSprite.SetActive(true);
         
         LoadCustomizations();
     }
-
+    [SerializeField]
+    private float _emergencyCooldown;
+    [SerializeField]
     private float _killCooldown;
+    private float _visionRange;
+    private float _blindVisionRange;
+    private float _currentVisionRange;
     private void LoadCustomizations()
     {
         float movSpeed = (float) PhotonNetwork.CurrentRoom.CustomProperties["MovSpeed"];
         RealSpeed = MovSpeed.Value * movSpeed;
         
-        float visionRange = 1;
+        _visionRange = 1;
         
         if (SceneStateManager.Instance.IsImpostor())
         {
-            visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["ImpostorVisionRange"];
+            _visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["ImpostorVisionRange"];
             _killCooldown = (float) PhotonNetwork.CurrentRoom.CustomProperties["KillCooldown"];
         }
         else
         {
-            visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["VisionRange"];
+            _visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["VisionRange"];
         }
 
-        AdjustVision(visionRange);
+        _emergencyCooldown = (int) PhotonNetwork.CurrentRoom.CustomProperties["EmergencyCooldown"];
+        _blindVisionRange = .20f;
+        SceneStateManager.Instance.EmergencyCount = (int) PhotonNetwork.CurrentRoom.CustomProperties["EmergencyCount"]; 
+        AdjustVision(_visionRange);
         ResetCooldowns();
     }
-
+    
+    public void HideMask()
+    {
+        VisionMask.SetActive(false);
+    }
     public void ShowMask()
     {
         VisionMask.SetActive(true);
     }
     public void AdjustVision(float range)
     {
-        float newVal = VisionRange.Value * range;
-        VisionMask.transform.localScale = new Vector3(newVal, newVal, 0f);
+        if (range >= _blindVisionRange)
+        {
+            _currentVisionRange = range;
+            float newVal = VisionRange.Value * range;
+            VisionMask.transform.localScale = new Vector3(newVal, newVal, 0f);
+        }
     }
 
     public void Stop()
@@ -83,10 +106,11 @@ public class MomongoController : MonoBehaviour
     #region Interactables
     public void Interact()
     {
-        if (_useInteractable != null)
+        if (_useInteractable == null || _useInteractable.CanInteract())
         {
-            _useInteractable.Interact(gameObject);
         }
+
+        _useInteractable?.Interact(gameObject);
     }
     
     public void Report()
@@ -99,11 +123,21 @@ public class MomongoController : MonoBehaviour
     
     public void Sabotage()
     {
-        Debug.Log("Not implemented, Sabotage!");
+        if (!IsImpostor())
+        {
+            return;
+        }
+        
+        UIMapManager.Instance.ToggleSabotageMap();
     }
     
     public void Kill()
     {
+        if (!IsImpostor())
+        {
+            return;
+        }
+        
         if (CooldownManager.GetTimer("KillCooldown") > 0)
         {
             return;
@@ -112,8 +146,14 @@ public class MomongoController : MonoBehaviour
         _killable.Interact(photonView.Owner);
     }
 
+    private bool IsImpostor()
+    {
+        return SceneStateManager.Instance.IsImpostor(photonView.Owner);
+    }
+
     public void ResetCooldowns()
     {
+        SceneStateManager.Instance.CooldownManager.AddTimer("EmergencyCooldown", _emergencyCooldown);
         CooldownManager.AddTimer("KillCooldown", _killCooldown);
     }
 
@@ -158,6 +198,7 @@ public class MomongoController : MonoBehaviour
         if (deadPlayer.IsLocal)
         {
             //TODO: Show big dying animation.
+            Debug.Log(deadPlayer.NickName + ", you just got killed by " + killer.NickName);
         }
 
         GameObject go = Instantiate(DeadBodyPrefab, transform.position, Quaternion.identity);
@@ -171,12 +212,16 @@ public class MomongoController : MonoBehaviour
 
     public void Die()
     {
-        //TODO: Make sure this doesn't call the event for already dead players.
         GhostMe();
 
         if (PhotonNetwork.IsMasterClient)
         {
             SomeoneDiedEvent.Raise();
+        }
+
+        if (photonView.IsMine)
+        {
+            HardEvent.Raise();
         }
     }
 
@@ -186,6 +231,10 @@ public class MomongoController : MonoBehaviour
         playerSetup.SetPlayerUI(); //This is needed so the killer doesn't kill the ghost again.
         playerSetup.KillRangeCollider.SetActive(false);
         _animator.SetBool("IsDead", true);
+        AdminSprite.SetActive(false);
+        
+        float movSpeed = (float) PhotonNetwork.CurrentRoom.CustomProperties["MovSpeed"];
+        RealSpeed = GhostSpeed.Value * movSpeed;
         
         SceneStateManager.Instance.SetIsAlive(photonView.Owner, false);
         SceneStateManager.Instance.SyncGhosts();
@@ -200,4 +249,47 @@ public class MomongoController : MonoBehaviour
         }
     }
     #endregion
+
+    private bool _blinding = false;
+    private float _nextBlind = .20f;
+    private void FixedUpdate()
+    {
+        if (_blinding)
+        {
+            
+            if (_nextBlind <= 0)
+            {
+                if (_currentVisionRange > _blindVisionRange)
+                {
+                    float step = _blindVisionRange/5;
+                    AdjustVision(_currentVisionRange - step);
+                }
+                else
+                {
+                    _blinding = false;
+                }
+                _nextBlind = .20f;
+            }
+            else
+            {
+                _nextBlind -= Time.deltaTime;
+            }
+
+        }
+    }
+
+    public void TurnOffLights()
+    {
+        if (IsImpostor())
+        {
+            return;
+        }
+
+        _blinding = true;
+    }
+    public void TurnOnLights()
+    {
+        _blinding = false;
+        AdjustVision(_visionRange);
+    }
 }

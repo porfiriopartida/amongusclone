@@ -8,8 +8,6 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
-using Random = UnityEngine.Random;
 
 
 public class NetworkLaunchManager : MonoBehaviourPunCallbacks
@@ -20,6 +18,8 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
     public GameEvent RoomRefreshedEvent;
     public GameEvent JoinedRoomEvent;
 
+    // public GameEvent ColorChanged;
+    public CharacterColors CharacterColors;
     private void RefreshRoomStatus()
     {
         RoomRefreshedEvent.Raise();
@@ -28,6 +28,20 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
     {
         //All clients sync their levels to the master user.
         PhotonNetwork.AutomaticallySyncScene = true;
+        
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.DestroyAll();
+        }
+    }
+
+    private void Start()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+        foreach (var player in players)
+        {
+            ResetCharacter(player);
+        }
     }
 
     #region Photon Callbacks 
@@ -93,29 +107,58 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
             #endif
             
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            PhotonNetwork.RaiseEvent(EventsConstants.NotifyImpostor, selected, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(EventsConstants.NOTIFY_IMPOSTOR, selected, raiseEventOptions, SendOptions.SendReliable);
         }
     }
     
     public override void OnJoinedRoom()
     {
-        Player[] playersList = PhotonNetwork.PlayerList;
-        SceneStateManager.Instance.Clear();
-        foreach (var player in playersList)
-        {
-            SceneStateManager.Instance.AddPlayer(player);
-        }
         RefreshRoomStatus();
-        
         JoinedRoomEvent.Raise();
+        // SceneStateManager.Instance.SetColor(PhotonNetwork.LocalPlayer);
+        SetCustomProperties(PhotonNetwork.LocalPlayer);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
-        SceneStateManager.Instance.AddPlayer(newPlayer);
+        // SceneStateManager.Instance.AddPlayer(newPlayer);
+        // SceneStateManager.Instance.SetColor(newPlayer);
+        SetCustomProperties(newPlayer);
         RefreshRoomStatus();
     }
+
+    private void ResetCharacter(Player player)
+    {
+        Hashtable hashtable = new Hashtable();
+            
+        hashtable[CustomProperties.IS_IMPOSTOR] = false;
+        hashtable[CustomProperties.IS_ALIVE] = true;
+            
+        player.SetCustomProperties(hashtable);
+    }
+
+    private void SetCustomProperties(Player player)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            ResetCharacter(player);
+            // SceneStateManager.Instance.SetColor(PhotonNetwork.LocalPlayer, player.ActorNumber);
+            
+            List<int> takenColors = SceneStateManager.Instance.GetTakenColors();
+            int colorsCount = CharacterColors.colors.Count;
+            for (int i = 0; i < colorsCount; i++)
+            {
+                if (!takenColors.Contains(i))
+                {
+                    Debug.Log("Giving color " + i + "to " + player);
+                    SceneStateManager.Instance.SetColor(player, i);
+                    break;
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region PrivateMethods
@@ -142,7 +185,6 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         RefreshRoomStatus();
-        SceneStateManager.Instance.RemovePlayer(otherPlayer);
     }
 
     // public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)

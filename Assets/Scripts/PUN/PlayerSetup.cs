@@ -14,20 +14,25 @@ namespace PUN
 
         public GameObject PlayerNamePanel;
 
+        public InputController InputController;
+
         public Canvas Hud;
         private void Start()
         {
             Camera mainCamera = Camera.main;
 
             //Inject color
-            GetComponent<SpriteRenderer>().color = SceneStateManager.Instance.GetColor(photonView.Owner);
+            Color newColor = SceneStateManager.Instance.GetColor(photonView.Owner);
+            GetComponent<SpriteRenderer>().color = newColor;
             
+            MomongoController momongoController = transform.GetComponent<MomongoController>();
             if (photonView.IsMine)
             {
-                MomongoController momongoController = transform.GetComponent<MomongoController>();
+                momongoController.MyMapIndicator.SetActive(true);
+                momongoController.MyMapIndicator.GetComponent<SpriteRenderer>().color = newColor;
                 momongoController.ShowMask();
                 SceneStateManager.Instance.MomongoController = momongoController;
-                
+                InputController.enabled = true;
                 transform.GetComponent<InputController>().enabled = true;
                 if (mainCamera != null)
                 {
@@ -40,8 +45,14 @@ namespace PUN
             }
             else
             {
+                momongoController.HideMask();
+                InputController.enabled = false;
+                Hud.gameObject.SetActive(false);
                 transform.GetComponent<InputController>().enabled = false;
             }
+
+            this.gameObject.name = photonView.Owner.NickName;
+            this.gameObject.transform.parent = SceneStateManager.Instance.Spawn.transform;
             SetPlayerUI();
 
         }

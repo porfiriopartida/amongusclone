@@ -8,7 +8,7 @@ public class DiscussionPanelManager : MonoBehaviour
     public GameObject PlayerPanelContainer;
     public GameObject PlayerPanelPrefab;
 
-    public GameObject AddPlayer(PlayerWrapper player, bool isLocalAlive)
+    public GameObject AddPlayer(Player player, bool isLocalAlive)
     {
         GameObject playerGo = Instantiate(PlayerPanelPrefab, PlayerPanelContainer.transform);
         PlayerPanelController p = playerGo.GetComponent<PlayerPanelController>();

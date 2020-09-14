@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using DefaultNamespace;
-using ExitGames.Client.Photon;
+﻿using System.Collections;
 using LopapaGames.ScriptableObjects;
 using Photon.Pun;
 using Photon.Realtime;
@@ -27,17 +24,20 @@ namespace PUN
         //SomeoneDiedEvent triggers this in self asset.
         public void GameOverCheck()
         {
-            int totalImpostors = SceneStateManager.Instance.GetImpostorsCount();
-            int totalCrewmate = SceneStateManager.Instance.GetCrewmateCount();
-            
+            if (PhotonNetwork.IsMasterClient)
+            {
+                int totalImpostors = SceneStateManager.Instance.GetImpostorsCount();
+                int totalCrewmate = SceneStateManager.Instance.GetCrewmateCount();
+                
 
-            if (CurrentTasks.Value == TotalTasks.Value || totalImpostors == 0)
-            {
-                StartCoroutine(GameScene("Scenes/CrewmateWin"));
-            }
-            else if(totalImpostors >= totalCrewmate)
-            {
-                StartCoroutine(GameScene("Scenes/ImpostorWin"));
+                if (CurrentTasks.Value == TotalTasks.Value || totalImpostors == 0)
+                {
+                    StartCoroutine(GameScene("Scenes/CrewmateWin"));
+                }
+                else if(totalImpostors >= totalCrewmate)
+                {
+                    StartCoroutine(GameScene("Scenes/ImpostorWin"));
+                }
             }
         }
         
@@ -48,6 +48,13 @@ namespace PUN
 #else
         yield return new WaitForSeconds(GameConfiguration.ChangeSceneWaiting);
 #endif
+            
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //Clean all objects because we are moving to a different scene.
+                PhotonNetwork.DestroyAll();
+            }
+            
             SceneManager.LoadScene(scene);
         }
 
@@ -57,6 +64,5 @@ namespace PUN
         }
 
         #endregion
-
     }
 }

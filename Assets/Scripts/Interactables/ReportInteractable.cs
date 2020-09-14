@@ -5,6 +5,11 @@ using UnityEngine;
 public abstract class ReportInteractable : MonoBehaviour, IInteractable
 {
     public abstract void Interact();
+    public bool CanInteract()
+    {
+        return true;
+    }
+
     public void Interact(object param)
     {
         this.Interact((Player) param);
