@@ -7,7 +7,7 @@ using Photon.Realtime;
 
 namespace PUN
 {
-    public class TaskListener : MonoBehaviourPunCallbacks, IOnEventCallback
+    public class TaskProgressListener : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         public Float Progress;
         public Integer TotalTasks;

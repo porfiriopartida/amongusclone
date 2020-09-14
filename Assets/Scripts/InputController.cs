@@ -68,6 +68,14 @@ namespace DefaultNamespace
             {
                 _momongoController.Report();
             }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _momongoController.Kill();
+            }
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                _momongoController.Sabotage();
+            }
         }
 #endif
     }

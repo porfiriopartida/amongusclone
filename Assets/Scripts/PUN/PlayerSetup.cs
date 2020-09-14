@@ -14,9 +14,12 @@ namespace PUN
 
         public GameObject PlayerNamePanel;
 
+        public InputController InputController;
+
         public Canvas Hud;
         private void Start()
         {
+            Debug.Log("PlayerSetup.Start");
             Camera mainCamera = Camera.main;
 
             //Inject color
@@ -27,7 +30,7 @@ namespace PUN
                 MomongoController momongoController = transform.GetComponent<MomongoController>();
                 momongoController.ShowMask();
                 SceneStateManager.Instance.MomongoController = momongoController;
-                
+                InputController.enabled = true;
                 transform.GetComponent<InputController>().enabled = true;
                 if (mainCamera != null)
                 {
@@ -40,8 +43,13 @@ namespace PUN
             }
             else
             {
+                InputController.enabled = false;
+                Hud.gameObject.SetActive(false);
                 transform.GetComponent<InputController>().enabled = false;
             }
+
+            this.gameObject.name = photonView.Owner.NickName;
+            this.gameObject.transform.parent = SceneStateManager.Instance.Spawn.transform;
             SetPlayerUI();
 
         }

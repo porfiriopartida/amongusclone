@@ -28,6 +28,11 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
     {
         //All clients sync their levels to the master user.
         PhotonNetwork.AutomaticallySyncScene = true;
+        
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.DestroyAll();
+        }
     }
 
     #region Photon Callbacks 

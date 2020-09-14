@@ -19,11 +19,11 @@ TagManager:
   - player
   - task
   - minigame
-  - 
-  - 
-  - 
-  - 
-  - 
+  - minimap
+  - map
+  - adminmap
+  - location_detector
+  - sabotage_map
   - 
   - 
   - 

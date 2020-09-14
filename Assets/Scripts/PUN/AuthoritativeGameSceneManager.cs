@@ -48,6 +48,13 @@ namespace PUN
 #else
         yield return new WaitForSeconds(GameConfiguration.ChangeSceneWaiting);
 #endif
+            
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //Clean all objects because we are moving to a different scene.
+                PhotonNetwork.DestroyAll();
+            }
+            
             SceneManager.LoadScene(scene);
         }
 

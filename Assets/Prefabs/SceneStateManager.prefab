@@ -50,7 +50,7 @@ MonoBehaviour:
   CharacterColors: {fileID: 11400000, guid: 41debd9ab1de9cc48b4ea47c6b7f1d03, type: 2}
   InputController: {fileID: 0}
   NotReportable: {fileID: 11400000, guid: 12c9694ea6a39a24eab887097408f6a7, type: 2}
-  TaskCompleted: {fileID: 11400000, guid: 87a01033098da7e40a83fb9867ef8291, type: 2}
+  MiniMap: {fileID: 0}
 --- !u!114 &879670491
 MonoBehaviour:
   m_ObjectHideFlags: 0

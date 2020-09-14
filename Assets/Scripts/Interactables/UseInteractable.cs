@@ -3,6 +3,17 @@ using UnityEngine;
 
 public abstract class UseInteractable : MonoBehaviour, IInteractable
 {
+    public bool CrewmateExclusive;
+    
+    void Start()
+    {
+        if (CrewmateExclusive && SceneStateManager.Instance.IsImpostor())
+        {
+            this.enabled = false;
+            GetComponent<Collider2D>().enabled = false;
+        }
+    }
+    
     public abstract void Interact();
     public void Interact(object param)
     {

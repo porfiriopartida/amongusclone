@@ -33,6 +33,7 @@ public class MomongoController : MonoBehaviour
     public GameEvent SomeoneDiedEvent;
 
     public CooldownManager CooldownManager;
+    public GameObject AdminSprite;
 
     private void Start()
     {
@@ -99,17 +100,37 @@ public class MomongoController : MonoBehaviour
     
     public void Sabotage()
     {
-        Debug.Log("Not implemented, Sabotage!");
+        if (!IsImpostor())
+        {
+            return;
+        }
+        // Debug.Log("Not implemented, Sabotage!");
+        // if (CooldownManager.GetTimer("SabotageCooldown") > 0)
+        // {
+        //     return;
+        // }
+        // CooldownManager.AddTimer("SabotageCooldown", _sabotageCooldown);
+        // _killable.Interact(photonView.Owner);
     }
     
     public void Kill()
     {
+        if (!IsImpostor())
+        {
+            return;
+        }
+        
         if (CooldownManager.GetTimer("KillCooldown") > 0)
         {
             return;
         }
         CooldownManager.AddTimer("KillCooldown", _killCooldown);
         _killable.Interact(photonView.Owner);
+    }
+
+    private bool IsImpostor()
+    {
+        return SceneStateManager.Instance.IsImpostor(photonView.Owner);
     }
 
     public void ResetCooldowns()

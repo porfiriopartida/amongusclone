@@ -15,6 +15,8 @@ public class SceneStateManager : Singleton<SceneStateManager>
     public CharacterColors CharacterColors;
     public InputController InputController;
 
+    public GameObject Spawn;
+    
     public static string TAG_PLAYER = "Player";
 
     public GameEvent NotReportable;
@@ -31,12 +33,12 @@ public class SceneStateManager : Singleton<SceneStateManager>
         DisableRegularInput();
     }
 
-    private void DisableRegularInput()
+    public void DisableRegularInput()
     {
         InputController.enabled = false;
     }
 
-    private void EnableRegularInput()
+    public void EnableRegularInput()
     {
         InputController.enabled = true;
     }
@@ -80,6 +82,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
     }
     public bool IsImpostor()
     {
+        //TODO: Cache LocalPlayer
         return SceneState.IsImpostor(PhotonNetwork.LocalPlayer);
     }
 
@@ -130,6 +133,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
             bool isEnabled = (owner.IsLocal || !isLocalPlayerAlive || isRemotePlayerAlive);
            
             momongoController.GetComponent<SpriteRenderer>().enabled = isEnabled;
+            momongoController.AdminSprite.GetComponent<SpriteRenderer>().enabled = isEnabled;
             momongoController.GetComponent<PlayerSetup>().PlayerNamePanel.SetActive(isEnabled);
         }
     }
@@ -252,5 +256,13 @@ public class SceneStateManager : Singleton<SceneStateManager>
     {
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(EventsConstants.TASK_COMPLETE, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public void RemoveAllUsers()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.DestroyAll();
+        }
     }
 }

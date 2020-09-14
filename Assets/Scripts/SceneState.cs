@@ -89,6 +89,11 @@ public class SceneState : ScriptableObject
 
     public void AddPlayer(Player player)
     {
+        if (GetPlayer(player) != null)
+        {
+            return;
+        }
+
         playerWrapper.Add(PlayerWrapper.Build(player));
     }
 

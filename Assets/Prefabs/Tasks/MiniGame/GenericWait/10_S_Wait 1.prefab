@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldownManager: {fileID: 2346062011999521694}
   Cooldown: WaitTime
-  text: {fileID: 7858513853290296334}
+  text: {fileID: 8814002148959596398}
 --- !u!1 &6256996034282011025
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,7 +545,7 @@ GameObject:
   - component: {fileID: 7083138708224043456}
   - component: {fileID: 2346062011999521694}
   m_Layer: 10
-  m_Name: 10_S_Wait
+  m_Name: 10_S_Wait 1
   m_TagString: Minigame
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

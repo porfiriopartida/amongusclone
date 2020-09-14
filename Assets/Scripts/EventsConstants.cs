@@ -15,5 +15,7 @@
         public const byte PROCESS_KICK = 9;
         
         public const byte TASK_COMPLETE = 10;
+        
+        public const byte GAME_STARTED = 11;
     }
 }
