@@ -22,7 +22,6 @@ public abstract class UseInteractable : MonoBehaviour, IInteractable
 
     public virtual void Interact(GameObject source)
     {
-        Debug.Log("Params are not used, just interacting.");
         Interact();
     }
 
