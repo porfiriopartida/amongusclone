@@ -544,6 +544,7 @@ GameObject:
   - component: {fileID: 3640830111083787058}
   - component: {fileID: 7083138708224043456}
   - component: {fileID: 2346062011999521694}
+  - component: {fileID: -9194173847933540932}
   m_Layer: 10
   m_Name: 5_S_Wait
   m_TagString: Minigame
@@ -628,9 +629,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e4dadb2579cd534ab6e0c560607c751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CooldownManager: {fileID: 2346062011999521694}
   IsRunning: 1
   Length: 5
-  CooldownManager: {fileID: 2346062011999521694}
 --- !u!114 &2346062011999521694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -643,3 +644,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3935df09d45ab8e45bf31aa603148f19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-9194173847933540932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8804405282374835263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ffc429b4044a4990ae8e3fbe02b324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 89b7bb5bb6b5556489a89213f9540fee, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7083138708224043456}
+        m_MethodName: CloseGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
