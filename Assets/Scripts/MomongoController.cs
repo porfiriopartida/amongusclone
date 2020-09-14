@@ -9,6 +9,7 @@ using UnityEngine;
 public class MomongoController : MonoBehaviour
 {
     //   private Rigidbody2D _rigidbody;
+    public GameEvent HardEvent;
     public Float MovSpeed;
     public Float VisionRange;
     private float RealSpeed;
@@ -45,24 +46,28 @@ public class MomongoController : MonoBehaviour
     }
 
     private float _killCooldown;
+    private float _visionRange;
+    private float _blindVisionRange;
+    private float _currentVisionRange;
     private void LoadCustomizations()
     {
         float movSpeed = (float) PhotonNetwork.CurrentRoom.CustomProperties["MovSpeed"];
         RealSpeed = MovSpeed.Value * movSpeed;
         
-        float visionRange = 1;
+        _visionRange = 1;
         
         if (SceneStateManager.Instance.IsImpostor())
         {
-            visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["ImpostorVisionRange"];
+            _visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["ImpostorVisionRange"];
             _killCooldown = (float) PhotonNetwork.CurrentRoom.CustomProperties["KillCooldown"];
         }
         else
         {
-            visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["VisionRange"];
+            _visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["VisionRange"];
         }
+        _blindVisionRange = .20f;
 
-        AdjustVision(visionRange);
+        AdjustVision(_visionRange);
         ResetCooldowns();
     }
 
@@ -72,8 +77,12 @@ public class MomongoController : MonoBehaviour
     }
     public void AdjustVision(float range)
     {
-        float newVal = VisionRange.Value * range;
-        VisionMask.transform.localScale = new Vector3(newVal, newVal, 0f);
+        if (range >= _blindVisionRange)
+        {
+            _currentVisionRange = range;
+            float newVal = VisionRange.Value * range;
+            VisionMask.transform.localScale = new Vector3(newVal, newVal, 0f);
+        }
     }
 
     public void Stop()
@@ -104,13 +113,8 @@ public class MomongoController : MonoBehaviour
         {
             return;
         }
-        // Debug.Log("Not implemented, Sabotage!");
-        // if (CooldownManager.GetTimer("SabotageCooldown") > 0)
-        // {
-        //     return;
-        // }
-        // CooldownManager.AddTimer("SabotageCooldown", _sabotageCooldown);
-        // _killable.Interact(photonView.Owner);
+        
+        UIMapManager.Instance.ToggleSabotageMap();
     }
     
     public void Kill()
@@ -179,6 +183,7 @@ public class MomongoController : MonoBehaviour
         if (deadPlayer.IsLocal)
         {
             //TODO: Show big dying animation.
+            Debug.Log(deadPlayer.NickName + ", you just got killed by " + killer.NickName);
         }
 
         GameObject go = Instantiate(DeadBodyPrefab, transform.position, Quaternion.identity);
@@ -192,12 +197,16 @@ public class MomongoController : MonoBehaviour
 
     public void Die()
     {
-        //TODO: Make sure this doesn't call the event for already dead players.
         GhostMe();
 
         if (PhotonNetwork.IsMasterClient)
         {
             SomeoneDiedEvent.Raise();
+        }
+
+        if (photonView.IsMine)
+        {
+            HardEvent.Raise();
         }
     }
 
@@ -222,7 +231,46 @@ public class MomongoController : MonoBehaviour
     }
     #endregion
 
+    private bool _blinding = false;
+    private float _nextBlind = .20f;
+    private void FixedUpdate()
+    {
+        if (_blinding)
+        {
+            
+            if (_nextBlind <= 0)
+            {
+                if (_currentVisionRange > _blindVisionRange)
+                {
+                    float step = _blindVisionRange/5;
+                    AdjustVision(_currentVisionRange - step);
+                }
+                else
+                {
+                    _blinding = false;
+                }
+                _nextBlind = .20f;
+            }
+            else
+            {
+                _nextBlind -= Time.deltaTime;
+            }
+
+        }
+    }
+
     public void TurnOffLights()
     {
+        if (IsImpostor())
+        {
+            return;
+        }
+
+        _blinding = true;
+    }
+    public void TurnOnLights()
+    {
+        _blinding = false;
+        AdjustVision(_visionRange);
     }
 }

@@ -2,8 +2,10 @@
 {
     public class EventsConstants
     {
+        public const byte GAME_STARTED = 11;
+        
         public const byte NotifyImpostor = 1;
-        public const byte SelectColor = 2;
+        public const byte SELECT_COLOR = 2;
         public const byte ReportDead = 3;
         public const byte EmergencyButtonPressed = 4;
         
@@ -16,7 +18,6 @@
         
         public const byte TASK_COMPLETE = 10;
         
-        public const byte GAME_STARTED = 11;
         public const byte SABOTAGE_LIGHT = 12;
         public const byte FIX_LIGHT = 12;
     }
