@@ -26,6 +26,7 @@ public class ConfigurationManager : MonoBehaviour
     private void OnEnable()
     {
         Refresh();
+        ConfigurationChanged.Raise();
     }
 
     public void Refresh()
