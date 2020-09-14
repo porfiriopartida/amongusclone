@@ -17,5 +17,7 @@
         public const byte TASK_COMPLETE = 10;
         
         public const byte GAME_STARTED = 11;
+        public const byte SABOTAGE_LIGHT = 12;
+        public const byte FIX_LIGHT = 12;
     }
 }

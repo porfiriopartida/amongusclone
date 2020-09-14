@@ -221,4 +221,8 @@ public class MomongoController : MonoBehaviour
         }
     }
     #endregion
+
+    public void TurnOffLights()
+    {
+    }
 }
