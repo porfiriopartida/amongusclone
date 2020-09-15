@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 79504220}
   - component: {fileID: 79504222}
-  - component: {fileID: 79504221}
   m_Layer: 8
   m_Name: Panel
   m_TagString: Untagged
@@ -46,35 +45,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 79504219}
   m_CullTransparentMesh: 0
---- !u!114 &79504221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 79504219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1058224373
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.15686275, g: 0.15686275, b: 0.26666668, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -445,6 +415,7 @@ MonoBehaviour:
   HardEvent: {fileID: 11400000, guid: 89b7bb5bb6b5556489a89213f9540fee, type: 2}
   MovSpeed: {fileID: 11400000, guid: 44da6de81eaa24142a4eacd503df21db, type: 2}
   VisionRange: {fileID: 11400000, guid: f918dd40bbe57224db77a466dc09420b, type: 2}
+  MyMapIndicator: {fileID: 5010451992226611279}
   VisionMask: {fileID: 1390220720}
   photonView: {fileID: 1193977708136447826}
   DeadBodyPrefab: {fileID: 5363248444984070123, guid: c5ed0eec543783a4baa46ef762293909,
@@ -837,6 +808,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AdminSprite
+      objectReference: {fileID: 0}
+    - target: {fileID: 7401517956067208261, guid: 1e8c34a18bc101043859159a90d86d4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e8c34a18bc101043859159a90d86d4a, type: 3}
