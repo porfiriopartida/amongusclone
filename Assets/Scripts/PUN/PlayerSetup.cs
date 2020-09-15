@@ -22,11 +22,14 @@ namespace PUN
             Camera mainCamera = Camera.main;
 
             //Inject color
-            GetComponent<SpriteRenderer>().color = SceneStateManager.Instance.GetColor(photonView.Owner);
+            Color newColor = SceneStateManager.Instance.GetColor(photonView.Owner);
+            GetComponent<SpriteRenderer>().color = newColor;
             
             if (photonView.IsMine)
             {
                 MomongoController momongoController = transform.GetComponent<MomongoController>();
+                momongoController.MyMapIndicator.SetActive(true);
+                momongoController.MyMapIndicator.GetComponent<SpriteRenderer>().color = newColor;
                 momongoController.ShowMask();
                 SceneStateManager.Instance.MomongoController = momongoController;
                 InputController.enabled = true;

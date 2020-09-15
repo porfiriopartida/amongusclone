@@ -13,6 +13,7 @@ public class MomongoController : MonoBehaviour
     public Float MovSpeed;
     public Float VisionRange;
     private float RealSpeed;
+    public GameObject MyMapIndicator;
 
     public GameObject VisionMask;
     //private CharacterController _characterController;
