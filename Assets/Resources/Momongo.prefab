@@ -423,6 +423,8 @@ MonoBehaviour:
   SomeoneDiedEvent: {fileID: 11400000, guid: f0630bc483853494ba2897b5df73dc89, type: 2}
   CooldownManager: {fileID: 7856572474854134205}
   AdminSprite: {fileID: 5268019052379556347}
+  _emergencyCooldown: 0
+  _killCooldown: 0
 --- !u!114 &1868694045
 MonoBehaviour:
   m_ObjectHideFlags: 0

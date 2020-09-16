@@ -13,7 +13,6 @@ public abstract class UseInteractable : MonoBehaviour, IInteractable
             GetComponent<Collider2D>().enabled = false;
         }
     }
-    
     public abstract void Interact();
     public void Interact(object param)
     {

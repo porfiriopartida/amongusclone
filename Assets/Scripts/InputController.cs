@@ -71,10 +71,10 @@ namespace DefaultNamespace
             {
                 _momongoController.Kill();
             }
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                _momongoController.Sabotage();
-            }
+            // if (Input.GetKeyDown(KeyCode.LeftShift))
+            // {
+            //     _momongoController.Sabotage();
+            // }
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 UIMapManager.Instance.ToggleMiniMap();

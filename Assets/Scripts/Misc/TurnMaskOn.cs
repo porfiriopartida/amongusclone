@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class TurnMaskOn : MonoBehaviour
 {
     void Start()
     {
-        GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+        GetComponent<TilemapRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
     }
 }

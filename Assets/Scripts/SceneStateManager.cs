@@ -37,6 +37,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
     }
 
     public bool IsGameRunning { get; set; }
+    public int EmergencyCount = 0;
 
     public void EnteringMiniGame()
     {

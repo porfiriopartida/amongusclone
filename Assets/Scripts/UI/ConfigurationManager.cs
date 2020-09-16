@@ -18,11 +18,12 @@ public class ConfigurationManager : MonoBehaviour
 
     public Text KillCooldown;
     
-    
     public Text LongTasks;
     public Text MediumTasks;
     public Text ShortTasks;
 
+    public Text EmergencyCount;
+    public Text EmergencyCooldown;
     private void OnEnable()
     {
         Refresh();
@@ -42,6 +43,9 @@ public class ConfigurationManager : MonoBehaviour
         LongTasks.text = GameConfiguration.LongTask.ToString();
         MediumTasks.text = GameConfiguration.MidTask.ToString();
         ShortTasks.text = GameConfiguration.ShortTask.ToString();
+        
+        EmergencyCount.text = GameConfiguration.EmergencyCount.ToString();
+        EmergencyCooldown.text = GameConfiguration.EmergencyCooldown.ToString();
     }
 
     public void AddImpostor()
@@ -202,6 +206,40 @@ public class ConfigurationManager : MonoBehaviour
         if (GameConfiguration.ShortTask > 0)
         {
             GameConfiguration.ShortTask -= 1;
+            ConfigurationChanged.Raise();
+        }
+    }
+    
+    
+    public void EmergencyCountAdd()
+    {
+        if (GameConfiguration.EmergencyCount < 2)
+        {
+            GameConfiguration.EmergencyCount += 1;
+            ConfigurationChanged.Raise();
+        }
+    }
+    public void EmergencyCountSubstract()
+    {
+        if (GameConfiguration.EmergencyCount > 0)
+        {
+            GameConfiguration.EmergencyCount -= 1;
+            ConfigurationChanged.Raise();
+        }
+    }
+    public void EmergencyCooldownAdd()
+    {
+        if (GameConfiguration.EmergencyCooldown < 30)
+        {
+            GameConfiguration.EmergencyCooldown += 5;
+            ConfigurationChanged.Raise();
+        }
+    }
+    public void EmergencyCooldownSubstract()
+    {
+        if (GameConfiguration.EmergencyCooldown > 0)
+        {
+            GameConfiguration.EmergencyCooldown -= 5;
             ConfigurationChanged.Raise();
         }
     }

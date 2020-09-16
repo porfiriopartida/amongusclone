@@ -23,7 +23,8 @@ public class GameConfiguration : ScriptableObject
     public int TotalImpostors = 1;
     // public bool ConfirmEjects = true;
     // public bool ConfirmAnimations = true;
-    // public int EmergencyMeetingsCount = 1;
+    public int EmergencyCount = 1;
+    public int EmergencyCooldown = 15;
     
     [Space(5, order = -1)]
     [Header("Players Speed")]
@@ -98,6 +99,8 @@ public class GameConfiguration : ScriptableObject
         
         hashtable.Add("SabotageLightsCooldown", SabotageLightsCooldown);
         
+        hashtable.Add("EmergencyCount", EmergencyCount);
+        hashtable.Add("EmergencyCooldown", EmergencyCooldown);
         return hashtable;
     }
 }

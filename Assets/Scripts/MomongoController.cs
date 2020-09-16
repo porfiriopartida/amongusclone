@@ -45,7 +45,9 @@ public class MomongoController : MonoBehaviour
         
         LoadCustomizations();
     }
-
+    [SerializeField]
+    private float _emergencyCooldown;
+    [SerializeField]
     private float _killCooldown;
     private float _visionRange;
     private float _blindVisionRange;
@@ -66,8 +68,10 @@ public class MomongoController : MonoBehaviour
         {
             _visionRange = (float) PhotonNetwork.CurrentRoom.CustomProperties["VisionRange"];
         }
-        _blindVisionRange = .20f;
 
+        _emergencyCooldown = (int) PhotonNetwork.CurrentRoom.CustomProperties["EmergencyCooldown"];
+        _blindVisionRange = .20f;
+        SceneStateManager.Instance.EmergencyCount = (int) PhotonNetwork.CurrentRoom.CustomProperties["EmergencyCount"]; 
         AdjustVision(_visionRange);
         ResetCooldowns();
     }
@@ -140,6 +144,7 @@ public class MomongoController : MonoBehaviour
 
     public void ResetCooldowns()
     {
+        SceneStateManager.Instance.CooldownManager.AddTimer("EmergencyCooldown", _emergencyCooldown);
         CooldownManager.AddTimer("KillCooldown", _killCooldown);
     }
 
