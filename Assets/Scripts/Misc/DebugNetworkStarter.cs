@@ -38,7 +38,7 @@ public class DebugNetworkStarter : MonoBehaviourPunCallbacks, IOnEventCallback
             else
             {
                 SceneStateManager.Instance.ResetPlayers();
-                SceneStateManager.Instance.AddPlayer(PhotonNetwork.LocalPlayer);
+                // SceneStateManager.Instance.AddPlayer(PhotonNetwork.LocalPlayer);
             }
         }
     }

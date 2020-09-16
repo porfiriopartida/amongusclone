@@ -8,8 +8,6 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
-using Random = UnityEngine.Random;
 
 
 public class NetworkLaunchManager : MonoBehaviourPunCallbacks
@@ -104,23 +102,32 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
     
     public override void OnJoinedRoom()
     {
-        Player[] playersList = PhotonNetwork.PlayerList;
-        SceneStateManager.Instance.Clear();
-        foreach (var player in playersList)
-        {
-            SceneStateManager.Instance.AddPlayer(player);
-        }
         RefreshRoomStatus();
-        
         JoinedRoomEvent.Raise();
+        // SceneStateManager.Instance.SetColor(PhotonNetwork.LocalPlayer);
+        SetCustomProperties(PhotonNetwork.LocalPlayer);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
-        SceneStateManager.Instance.AddPlayer(newPlayer);
+        // SceneStateManager.Instance.AddPlayer(newPlayer);
+        // SceneStateManager.Instance.SetColor(newPlayer);
+        SetCustomProperties(newPlayer);
         RefreshRoomStatus();
     }
+
+    private void SetCustomProperties(Player player)
+    {
+        Hashtable hashtable = new Hashtable();
+        
+        hashtable[CustomProperties.IS_IMPOSTOR] = false;
+        hashtable[CustomProperties.IS_ALIVE] = true;
+        hashtable[CustomProperties.PLAYER_COLOR] = player.ActorNumber;
+
+        player.SetCustomProperties(hashtable);
+    }
+
     #endregion
 
     #region PrivateMethods
@@ -147,7 +154,6 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         RefreshRoomStatus();
-        SceneStateManager.Instance.RemovePlayer(otherPlayer);
     }
 
     // public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)

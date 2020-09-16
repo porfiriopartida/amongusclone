@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using ExitGames.Client.Photon;
 using LopapaGames.Common.Core;
 using Photon.Pun;
@@ -15,9 +14,9 @@ public class ImpostorEventSetup : MonoBehaviourPunCallbacks, IOnEventCallback
         SceneStateManager.Instance.ResetPlayers();
         foreach (var userId in userIdList)
         {
-            PlayerWrapper playerWrapper = SceneStateManager.Instance.FindPlayer(userId);
-            SceneStateManager.Instance.SetImpostor(playerWrapper.Player);
-            Debug.Log("Impostor is: " + playerWrapper.Player.NickName + ":" + userId);
+            Player player = SceneStateManager.Instance.FindPlayer(userId);
+            SceneStateManager.Instance.SetImpostor(player);
+            Debug.Log("Impostor is: " + player.NickName + ":" + userId);
         }
 
         if (SceneStateManager.Instance.IsImpostor(PhotonNetwork.LocalPlayer))

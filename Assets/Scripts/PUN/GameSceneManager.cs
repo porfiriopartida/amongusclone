@@ -90,7 +90,7 @@ namespace PUN
         
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            SceneStateManager.Instance.RemovePlayer(otherPlayer);
+            // SceneStateManager.Instance.RemovePlayer(otherPlayer);
         }
 
         #region PUN

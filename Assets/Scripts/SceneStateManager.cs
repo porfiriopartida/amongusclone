@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using ExitGames.Client.Photon;
 using LopapaGames.Common.Core;
 using LopapaGames.ScriptableObjects;
@@ -60,10 +59,10 @@ public class SceneStateManager : Singleton<SceneStateManager>
         InputController.enabled = true;
     }
 
-    public void SetPlayers(Player[] players)
-    {
-        SceneState.SetPlayers(players);
-    }
+    // public void SetPlayers(Player[] players)
+    // {
+    //     SceneState.SetPlayers(players);
+    // }
     public void SetImpostor(Player player)
     {
         SceneState.SetImpostor(player);
@@ -73,20 +72,6 @@ public class SceneStateManager : Singleton<SceneStateManager>
         SceneState.ResetPlayers();
     }
 
-    public void AddPlayer(Player player)
-    {
-        SceneState.AddPlayer(player);
-    }
-
-    public void RemovePlayer(Player player)
-    {
-        SceneState.RemovePlayer(player);
-    }
-
-    public void Clear()
-    {
-        SceneState.Clear();
-    }
 
     public bool IsImpostor(Player localPlayer)
     {
@@ -122,13 +107,18 @@ public class SceneStateManager : Singleton<SceneStateManager>
 
     public Color GetColor(Player player)
     {
-        var playerIndex = SceneState.GetPlayerIndex(player);
-        SceneState.GetPlayer(player).Color = CharacterColors.colors[playerIndex];
-        return SceneState.GetPlayer(player).Color;
+        return SceneState.GetColor(player);
     }
-    public PlayerWrapper GetPlayerWrapper(Player player)
+
+    public void SetColor(Player player, int idx)
     {
-        return SceneState.GetPlayer(player);
+        SceneState.SetColor(player, idx);
+    }
+
+    public void SetColor(Player player)
+    {
+        var playerIndex = SceneState.GetPlayerIndex(player);
+        SetColor(player, playerIndex);
     }
 
     public void SyncGhosts()
@@ -158,22 +148,26 @@ public class SceneStateManager : Singleton<SceneStateManager>
     {
         return SceneState.IsAlive(PhotonNetwork.LocalPlayer);
     }
+    public bool IsAlive(Player player)
+    {
+        return SceneState.IsAlive(player);
+    }
 
     private void HideAllPlayers()
     {
         HardEvent.Raise();
         players = GameObject.FindGameObjectsWithTag(TAG_PLAYER);
-        foreach (var gameObject in players)
+        foreach (var _gameObject in players)
         {
-            gameObject.SetActive(false);
+            _gameObject.SetActive(false);
         }
     }
 
     private void ShowAllPlayers()
     {
-        foreach (var gameObject in players)
+        foreach (var _gameObject in players)
         {
-            gameObject.SetActive(true);
+            _gameObject.SetActive(true);
         }
     }
 
@@ -205,12 +199,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
         }
     }
 
-    public List<PlayerWrapper> GetPlayers()
-    {
-        return SceneState.GetPlayers();
-    }
-
-    public PlayerWrapper FindPlayer(string uuid)
+    public Player FindPlayer(string uuid)
     {
         return SceneState.FindPlayer(uuid);
     }
@@ -231,7 +220,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
         {
             MomongoController momongoController = deadPlayer.GetComponent<MomongoController>();
             Player player = momongoController.photonView.Owner;
-            if (!GetPlayerWrapper(player).IsAlive)
+            if (!IsAlive(player))
             {
                 momongoController.GhostMe();
             }
@@ -252,7 +241,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
             if ( userId.Equals(uuid))
             {
                 momongoController.Die();
-            } else if (!GetPlayerWrapper(player).IsAlive)
+            } else if (!IsAlive(player))
             {
                 momongoController.GhostMe();
             }

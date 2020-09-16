@@ -42,8 +42,8 @@ public class VotingEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
             //Show Body Found Screen:
             SceneStateManager.Instance.EnteringVoting();
             string reporterdUuid = (string) photonEvent.CustomData;
-            PlayerWrapper Reporter = SceneStateManager.Instance.FindPlayer(reporterdUuid);
-            Debug.Log(Reporter.Player.NickName + " called for an emergency meeting");
+            Player Reporter = SceneStateManager.Instance.FindPlayer(reporterdUuid);
+            Debug.Log(Reporter.NickName + " called for an emergency meeting");
             Debug.Log(reporterdUuid);
             EmergencyButtonPressedAlert.GetComponent<EmergencyController>().SetFounder(Reporter);
             EmergencyButtonPressedAlert.SetActive(true);
@@ -108,7 +108,7 @@ public class VotingEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         yield return new WaitForSeconds(2);
         
-        PlayerWrapper voted = VotingManager.Instance.GetMostVoted();
+        Player voted = VotingManager.Instance.GetMostVoted();
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         
         if (voted == null)
@@ -117,27 +117,27 @@ public class VotingEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
         }
         else
         {
-            PhotonNetwork.RaiseEvent(EventsConstants.PROCESS_KICK, voted.Player.UserId, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(EventsConstants.PROCESS_KICK, voted.UserId, raiseEventOptions, SendOptions.SendReliable);
         }
     }
     private void ValidateVotes()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            List<PlayerWrapper> playerWrappers =  SceneStateManager.Instance.GetPlayers();
-            bool AllAliveVoted = true;
-            foreach (var playerWrapper in playerWrappers)
+            Player[] players = PhotonNetwork.PlayerList;
+            bool allAliveVoted = true;
+            foreach (var player in players)
             {
-                if (playerWrapper.IsAlive)
+                if (SceneStateManager.Instance.IsAlive(player))
                 {
-                    if (!VotingManager.Instance.HasAlreadyVoted(playerWrapper.Player.UserId))
+                    if (!VotingManager.Instance.HasAlreadyVoted(player.UserId))
                     {
-                        AllAliveVoted = false;
+                        allAliveVoted = false;
                     }
                 }
             }
 
-            if (AllAliveVoted)
+            if (allAliveVoted)
             {
                 VotingManager.Instance.ProcessVoting();
             }
