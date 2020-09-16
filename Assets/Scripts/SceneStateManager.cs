@@ -112,6 +112,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
 
     public void SetColor(Player player, int idx)
     {
+        Debug.Log("Assigning color to " + player.NickName + ":" + idx);
         SceneState.SetColor(player, idx);
     }
 
