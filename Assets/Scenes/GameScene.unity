@@ -193,7 +193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 124199215}
   m_Layer: 0
-  m_Name: Wire
+  m_Name: ScoopingDogefish
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -286,6 +286,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 736257933446525561, guid: 1feb36938afb12547949180225dfbb73,
+        type: 3}
+      propertyPath: TaskPrefab
+      value: 
+      objectReference: {fileID: 6005212687293317261, guid: ac0ded9a9d2307e4ab4abf06e6f4e180,
+        type: 3}
+    - target: {fileID: 4099217782412250088, guid: 1feb36938afb12547949180225dfbb73,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ae470f1b2611dd47817d76c49df2512,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1feb36938afb12547949180225dfbb73, type: 3}
 --- !u!4 &140558335 stripped
@@ -2013,6 +2025,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 736257933446525561, guid: 1feb36938afb12547949180225dfbb73,
+        type: 3}
+      propertyPath: TaskPrefab
+      value: 
+      objectReference: {fileID: 6005212687293317261, guid: ac0ded9a9d2307e4ab4abf06e6f4e180,
+        type: 3}
+    - target: {fileID: 4099217782412250088, guid: 1feb36938afb12547949180225dfbb73,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ae470f1b2611dd47817d76c49df2512,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1feb36938afb12547949180225dfbb73, type: 3}
 --- !u!4 &565675765 stripped
@@ -5066,7 +5090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1381210887}
   m_Layer: 0
-  m_Name: Wire
+  m_Name: ScoopingDogefish
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6402,7 +6426,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1713272203}
   m_Layer: 0
-  m_Name: Wire
+  m_Name: ScoopingDogefish
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6692,6 +6716,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 736257933446525561, guid: 1feb36938afb12547949180225dfbb73,
+        type: 3}
+      propertyPath: TaskPrefab
+      value: 
+      objectReference: {fileID: 6005212687293317261, guid: ac0ded9a9d2307e4ab4abf06e6f4e180,
+        type: 3}
+    - target: {fileID: 4099217782412250088, guid: 1feb36938afb12547949180225dfbb73,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ae470f1b2611dd47817d76c49df2512,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1feb36938afb12547949180225dfbb73, type: 3}
 --- !u!4 &1840395650 stripped
@@ -12764,7 +12800,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2095449947}
   m_Layer: 0
-  m_Name: WiresCollection
+  m_Name: ScoopingDogefishCollection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13222,6 +13258,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CommonActionsPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 6762370724031970908, guid: 6564e4a2eb5c1674f8129fc13eb6d034,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8352981274735692354, guid: 6564e4a2eb5c1674f8129fc13eb6d034,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13540,6 +13581,7 @@ MonoBehaviour:
   OnConnectedEvent: {fileID: 11400000, guid: 77660af752b571a47af1552a6d978385, type: 2}
   RoomRefreshedEvent: {fileID: 11400000, guid: 20d16b4527699e54b8a386c9410e7ef6, type: 2}
   JoinedRoomEvent: {fileID: 11400000, guid: aae3db46475cb1e428a2527c748deb06, type: 2}
+  CharacterColors: {fileID: 11400000, guid: 41debd9ab1de9cc48b4ea47c6b7f1d03, type: 2}
 --- !u!1001 &4285581727066235041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14127,6 +14169,11 @@ PrefabInstance:
       propertyPath: m_BackGroundColor.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7526539793626303197, guid: 547eb1bf4326236428e543e6df96b3c2,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 464695
+      objectReference: {fileID: 0}
     - target: {fileID: 7526539793626303198, guid: 547eb1bf4326236428e543e6df96b3c2,
         type: 3}
       propertyPath: m_Name
@@ -14215,5 +14262,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NotifyImpostor: {fileID: 11400000, guid: 8026bd7011840484eb067c3e1eb113f5, type: 2}
   NotifyCrewmate: {fileID: 11400000, guid: 7f6d42ca130ba754ab254ff272f2baae, type: 2}
-  ColorPlayer: {fileID: 0}
-  CharacterColors: {fileID: 0}
+  ColorUpdated: {fileID: 11400000, guid: d853f68d40673cc45b85cff7d51aefb8, type: 2}

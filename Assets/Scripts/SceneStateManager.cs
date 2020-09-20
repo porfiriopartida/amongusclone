@@ -43,6 +43,7 @@ public class SceneStateManager : Singleton<SceneStateManager>
     public void EnteringMiniGame()
     {
         MomongoController.Stop();
+        MomongoController.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         DisableRegularInput();
     }
 
@@ -54,17 +55,14 @@ public class SceneStateManager : Singleton<SceneStateManager>
     public void EnableRegularInput()
     {
         InputController.enabled = true;
+        MomongoController.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
     }
 
     public void LeavingMiniGame()
     {
-        InputController.enabled = true;
+        EnableRegularInput();
     }
-
-    // public void SetPlayers(Player[] players)
-    // {
-    //     SceneState.SetPlayers(players);
-    // }
+    
     public void SetImpostor(Player player)
     {
         SceneState.SetImpostor(player);
@@ -73,7 +71,6 @@ public class SceneStateManager : Singleton<SceneStateManager>
     {
         SceneState.ResetPlayers();
     }
-
 
     public bool IsImpostor(Player localPlayer)
     {

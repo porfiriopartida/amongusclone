@@ -7,6 +7,9 @@ TagManager:
   - Minigame
   - PlayerVotingPanel
   - DeadBody
+  - minigame_wall
+  - minigame_target
+  - minigame_player
   layers:
   - Default
   - TransparentFX
@@ -24,9 +27,9 @@ TagManager:
   - adminmap
   - location_detector
   - sabotage_map
-  - 
-  - 
-  - 
+  - minigame_collider
+  - minigame_player
+  - minigame_target
   - 
   - 
   - 
@@ -43,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: MINIGAME
+    uniqueID: 3974750139
     locked: 0
