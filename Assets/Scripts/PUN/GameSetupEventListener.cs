@@ -31,7 +31,7 @@ public class ImpostorEventSetup : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
-        if (photonEvent.Code == EventsConstants.NotifyImpostor)
+        if (photonEvent.Code == EventsConstants.NOTIFY_IMPOSTOR)
         {
             EventSetupImpostor((string[])photonEvent.CustomData);
         }

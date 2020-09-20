@@ -11,6 +11,7 @@ public class MomongoController : MonoBehaviour
     //   private Rigidbody2D _rigidbody;
     public GameEvent HardEvent;
     public Float MovSpeed;
+    public Float GhostSpeed;
     public Float VisionRange;
     private float RealSpeed;
     public GameObject MyMapIndicator;
@@ -42,6 +43,7 @@ public class MomongoController : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         // photonView = PhotonView.Get(this);
         _animator = GetComponent<Animator>();
+        AdminSprite.SetActive(true);
         
         LoadCustomizations();
     }
@@ -75,7 +77,11 @@ public class MomongoController : MonoBehaviour
         AdjustVision(_visionRange);
         ResetCooldowns();
     }
-
+    
+    public void HideMask()
+    {
+        VisionMask.SetActive(false);
+    }
     public void ShowMask()
     {
         VisionMask.SetActive(true);
@@ -222,6 +228,10 @@ public class MomongoController : MonoBehaviour
         playerSetup.SetPlayerUI(); //This is needed so the killer doesn't kill the ghost again.
         playerSetup.KillRangeCollider.SetActive(false);
         _animator.SetBool("IsDead", true);
+        AdminSprite.SetActive(false);
+        
+        float movSpeed = (float) PhotonNetwork.CurrentRoom.CustomProperties["MovSpeed"];
+        RealSpeed = GhostSpeed.Value * movSpeed;
         
         SceneStateManager.Instance.SetIsAlive(photonView.Owner, false);
         SceneStateManager.Instance.SyncGhosts();
