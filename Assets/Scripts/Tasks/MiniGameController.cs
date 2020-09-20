@@ -1,5 +1,4 @@
-﻿using System;
-using LopapaGames.ScriptableObjects;
+﻿using LopapaGames.ScriptableObjects;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -32,8 +31,8 @@ namespace DefaultNamespace
         public virtual void AwardProgress()
         {
             Debug.Log("Awarding progress for mini game " + gameObject.name);
-            SceneStateManager.Instance.AwardProgress();
             Destroy(taskInteractable.gameObject, .5f);
+            SceneStateManager.Instance.AwardProgress();
         }
         
         #region Events

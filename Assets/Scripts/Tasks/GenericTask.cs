@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using DefaultNamespace;
-using LopapaGames.ScriptableObjects;
+﻿using DefaultNamespace;
 
 namespace Tasks
 {
@@ -11,7 +9,6 @@ namespace Tasks
         public float Length;
         public override void StartGame()
         {
-            // OpenGame();
             ResetState();
         }
 
@@ -25,13 +22,7 @@ namespace Tasks
         {
             _isWin = true;
             CooldownManager.AddTimer("WaitTime", Length);
-            // StartCoroutine(DelayedWin());
         }
-
-        // private IEnumerator DelayedWin()
-        // {
-        //     
-        // }
 
         private void Update()
         {

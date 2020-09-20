@@ -22,9 +22,11 @@ public class MomongoController : MonoBehaviour
     private Vector2 _cacheDirection;
     
     private Rigidbody2D _rigidbody2D;
-
+    [SerializeField]
     private IInteractable _useInteractable;
+    [SerializeField]
     private IInteractable _reportableInteractable;
+    [SerializeField]
     private IInteractable _killable;
 
     public PhotonView photonView;
@@ -104,10 +106,11 @@ public class MomongoController : MonoBehaviour
     #region Interactables
     public void Interact()
     {
-        if (_useInteractable != null)
+        if (_useInteractable == null || _useInteractable.CanInteract())
         {
-            _useInteractable.Interact(gameObject);
         }
+
+        _useInteractable?.Interact(gameObject);
     }
     
     public void Report()

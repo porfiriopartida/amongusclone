@@ -34,13 +34,23 @@ public class Killable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        MomongoController.GetKilled();
+        if (CanInteract())
+        {
+            MomongoController.GetKilled();
+        }
+    }
+
+    public bool CanInteract()
+    {
+        return true;
     }
 
     public void Interact(object param)
     {
-        // this.Interact((Player) param);
-        Interact();
+        if (CanInteract())
+        {
+            Interact();
+        }
     }
 
     // public void Interact(Player player)
