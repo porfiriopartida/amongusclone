@@ -18,6 +18,8 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
     public GameEvent RoomRefreshedEvent;
     public GameEvent JoinedRoomEvent;
 
+    // public GameEvent ColorChanged;
+    public CharacterColors CharacterColors;
     private void RefreshRoomStatus()
     {
         RoomRefreshedEvent.Raise();
@@ -30,6 +32,15 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.DestroyAll();
+        }
+    }
+
+    private void Start()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+        foreach (var player in players)
+        {
+            ResetCharacter(player);
         }
     }
 
@@ -96,7 +107,7 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
             #endif
             
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            PhotonNetwork.RaiseEvent(EventsConstants.NotifyImpostor, selected, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(EventsConstants.NOTIFY_IMPOSTOR, selected, raiseEventOptions, SendOptions.SendReliable);
         }
     }
     
@@ -117,15 +128,35 @@ public class NetworkLaunchManager : MonoBehaviourPunCallbacks
         RefreshRoomStatus();
     }
 
-    private void SetCustomProperties(Player player)
+    private void ResetCharacter(Player player)
     {
         Hashtable hashtable = new Hashtable();
-        
+            
         hashtable[CustomProperties.IS_IMPOSTOR] = false;
         hashtable[CustomProperties.IS_ALIVE] = true;
-        hashtable[CustomProperties.PLAYER_COLOR] = player.ActorNumber;
-
+            
         player.SetCustomProperties(hashtable);
+    }
+
+    private void SetCustomProperties(Player player)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            ResetCharacter(player);
+            // SceneStateManager.Instance.SetColor(PhotonNetwork.LocalPlayer, player.ActorNumber);
+            
+            List<int> takenColors = SceneStateManager.Instance.GetTakenColors();
+            int colorsCount = CharacterColors.colors.Count;
+            for (int i = 0; i < colorsCount; i++)
+            {
+                if (!takenColors.Contains(i))
+                {
+                    Debug.Log("Giving color " + i + "to " + player);
+                    SceneStateManager.Instance.SetColor(player, i);
+                    break;
+                }
+            }
+        }
     }
 
     #endregion

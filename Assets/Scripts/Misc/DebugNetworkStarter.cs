@@ -26,7 +26,7 @@ public class DebugNetworkStarter : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
-        if (photonEvent.Code == EventsConstants.NotifyImpostor)
+        if (photonEvent.Code == EventsConstants.NOTIFY_IMPOSTOR)
         {
             _gameSceneManager.SpawnMe();
             

@@ -25,7 +25,7 @@ public class EmergencyButtonInteractable : UseInteractable
         if (CanUse())
         {
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            PhotonNetwork.RaiseEvent(EventsConstants.EmergencyButtonPressed, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(EventsConstants.EMERGENCY_BUTTON_PRESSED, PhotonNetwork.LocalPlayer.UserId, raiseEventOptions, SendOptions.SendReliable);
             
             SceneStateManager.Instance.EmergencyCount--;
         }

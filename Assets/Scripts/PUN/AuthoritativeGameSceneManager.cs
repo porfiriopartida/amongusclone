@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using DefaultNamespace;
-using ExitGames.Client.Photon;
+﻿using System.Collections;
 using LopapaGames.ScriptableObjects;
 using Photon.Pun;
 using Photon.Realtime;
@@ -67,6 +64,5 @@ namespace PUN
         }
 
         #endregion
-
     }
 }

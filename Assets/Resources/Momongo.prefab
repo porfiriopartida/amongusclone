@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1390220721
 Transform:
   m_ObjectHideFlags: 0
@@ -414,6 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HardEvent: {fileID: 11400000, guid: 89b7bb5bb6b5556489a89213f9540fee, type: 2}
   MovSpeed: {fileID: 11400000, guid: 44da6de81eaa24142a4eacd503df21db, type: 2}
+  GhostSpeed: {fileID: 11400000, guid: 781718df8a582de41b87cde18fb1b2e2, type: 2}
   VisionRange: {fileID: 11400000, guid: f918dd40bbe57224db77a466dc09420b, type: 2}
   MyMapIndicator: {fileID: 5010451992226611279}
   VisionMask: {fileID: 1390220720}
@@ -814,7 +815,7 @@ PrefabInstance:
     - target: {fileID: 7401517956067208261, guid: 1e8c34a18bc101043859159a90d86d4a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e8c34a18bc101043859159a90d86d4a, type: 3}

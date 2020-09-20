@@ -13068,6 +13068,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 274ddcc9c6455954caa2db07be2bce49,
         type: 2}
+    - target: {fileID: 223223888215854769, guid: 258f360634b0e944690df5a8df93fed0,
+        type: 3}
+      propertyPath: CharacterColors
+      value: 
+      objectReference: {fileID: 11400000, guid: 41debd9ab1de9cc48b4ea47c6b7f1d03,
+        type: 2}
+    - target: {fileID: 223223888215854769, guid: 258f360634b0e944690df5a8df93fed0,
+        type: 3}
+      propertyPath: ColorPlayer
+      value: 
+      objectReference: {fileID: 11400000, guid: 7051ab43b492ef842a7e5574d777a542,
+        type: 2}
     - target: {fileID: 223223888215854770, guid: 258f360634b0e944690df5a8df93fed0,
         type: 3}
       propertyPath: m_Name
@@ -14203,3 +14215,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NotifyImpostor: {fileID: 11400000, guid: 8026bd7011840484eb067c3e1eb113f5, type: 2}
   NotifyCrewmate: {fileID: 11400000, guid: 7f6d42ca130ba754ab254ff272f2baae, type: 2}
+  ColorPlayer: {fileID: 0}
+  CharacterColors: {fileID: 0}

@@ -1,4 +1,6 @@
-﻿using ExitGames.Client.Photon;
+﻿using System.Collections.Generic;
+using DefaultNamespace;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -54,24 +56,44 @@ public class SceneState : ScriptableObject
         
         player.SetCustomProperties(player.CustomProperties);
     }
-    
-    
+
+
     public void SetColor(Player player, int idx)
     {
-        if (player == null)
-        {
-            return;
-        }
-
-        player.CustomProperties[CustomProperties.PLAYER_COLOR] = idx;
-        player.SetCustomProperties(player.CustomProperties);
+        RaiseEventOptions _raiseEventOptions = new RaiseEventOptions {Receivers = ReceiverGroup.All};
+        PhotonNetwork.RaiseEvent(EventsConstants.SELECT_COLOR, new string[2]{ player.UserId, idx.ToString()}, _raiseEventOptions, SendOptions.SendReliable);
     }
     
     public Color GetColor(Player player)
     {
-        int idx = (int)player.CustomProperties[CustomProperties.PLAYER_COLOR];
+        int idx = GetColorIdx(player);
+        if (idx == -1)
+        {
+            return Color.white;
+        }
         Color c = CharacterColors.colors[idx];
         return c;
+    }
+    public int GetColorIdx(Player player)
+    {
+        var obj = player.CustomProperties[CustomProperties.PLAYER_COLOR];
+        if (obj == null)
+        {
+            return -1;
+        }
+        return (int)obj;
+    }
+
+    public List<int> GetTakenColors()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+        List<int> colors = new List<int>();
+        foreach (var player in players)
+        {
+            colors.Add(GetColorIdx(player));
+        }
+
+        return colors;
     }
 
     public int GetImpostorsCount()

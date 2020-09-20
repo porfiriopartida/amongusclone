@@ -37,6 +37,6 @@ public class DeadBodyInteractable : ReportInteractable
         
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
          
-        PhotonNetwork.RaiseEvent(EventsConstants.ReportDead, new string[]{PhotonNetwork.LocalPlayer.UserId, _player.UserId}, raiseEventOptions, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(EventsConstants.REPORT_DEAD, new string[]{PhotonNetwork.LocalPlayer.UserId, _player.UserId}, raiseEventOptions, SendOptions.SendReliable);
     }
 }

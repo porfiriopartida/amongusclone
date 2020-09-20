@@ -25,9 +25,9 @@ namespace PUN
             Color newColor = SceneStateManager.Instance.GetColor(photonView.Owner);
             GetComponent<SpriteRenderer>().color = newColor;
             
+            MomongoController momongoController = transform.GetComponent<MomongoController>();
             if (photonView.IsMine)
             {
-                MomongoController momongoController = transform.GetComponent<MomongoController>();
                 momongoController.MyMapIndicator.SetActive(true);
                 momongoController.MyMapIndicator.GetComponent<SpriteRenderer>().color = newColor;
                 momongoController.ShowMask();
@@ -45,6 +45,7 @@ namespace PUN
             }
             else
             {
+                momongoController.HideMask();
                 InputController.enabled = false;
                 Hud.gameObject.SetActive(false);
                 transform.GetComponent<InputController>().enabled = false;

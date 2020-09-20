@@ -1,4 +1,5 @@
-﻿using DefaultNamespace;
+﻿using System.Collections.Generic;
+using DefaultNamespace;
 using ExitGames.Client.Photon;
 using LopapaGames.Common.Core;
 using LopapaGames.ScriptableObjects;
@@ -14,7 +15,8 @@ public class SceneStateManager : Singleton<SceneStateManager>
     public GameEvent HardEvent;
     public SceneState SceneState;
     public GameConfiguration gameConfiguration;
-    public CharacterColors CharacterColors;
+    // public CharacterColors CharacterColors;
+    // public ColorPlayer ColorPlayer;
     public InputController InputController;
 
     public GameObject Spawn;
@@ -109,18 +111,28 @@ public class SceneStateManager : Singleton<SceneStateManager>
     {
         return SceneState.GetColor(player);
     }
+    public int GetColorIdx(Player player)
+    {
+        return SceneState.GetColorIdx(player);
+    }
+    public List<int> GetTakenColors()
+    {
+        return SceneState.GetTakenColors();
+    }
 
     public void SetColor(Player player, int idx)
     {
         Debug.Log("Assigning color to " + player.NickName + ":" + idx);
         SceneState.SetColor(player, idx);
     }
+    
+    
 
-    public void SetColor(Player player)
-    {
-        var playerIndex = SceneState.GetPlayerIndex(player);
-        SetColor(player, playerIndex);
-    }
+    // public void SetColor(Player player)
+    // {
+    //     var playerIndex = SceneState.GetPlayerIndex(player);
+    //     SetColor(player, playerIndex);
+    // }
 
     public void SyncGhosts()
     {

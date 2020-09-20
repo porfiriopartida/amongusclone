@@ -16,7 +16,7 @@ public class VotingEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
     public void OnEvent(EventData photonEvent)
     {
         byte code = photonEvent.Code;
-        if (code == EventsConstants.ReportDead)
+        if (code == EventsConstants.REPORT_DEAD)
         {
             //Show Body Found Screen:
             SceneStateManager.Instance.EnteringVoting();
@@ -37,7 +37,7 @@ public class VotingEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
             
             StartCoroutine(ShowVotingScreen());
         }
-        else if (code == EventsConstants.EmergencyButtonPressed)
+        else if (code == EventsConstants.EMERGENCY_BUTTON_PRESSED)
         {
             //Show Body Found Screen:
             SceneStateManager.Instance.EnteringVoting();
