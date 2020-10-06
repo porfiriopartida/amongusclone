@@ -12,6 +12,7 @@ public class UIMapManager : Singleton<UIMapManager>
         SabotageMap.SetActive(!SabotageMap.activeSelf);
         AdminMiniMap.SetActive(false);
         MiniMap.SetActive(false);
+        SceneStateManager.Instance.EnableRegularInput();
     }
     public void CloseSabotageMap()
     {
@@ -24,6 +25,7 @@ public class UIMapManager : Singleton<UIMapManager>
         MiniMap.SetActive(!MiniMap.activeSelf);
         SabotageMap.SetActive(false);
         AdminMiniMap.SetActive(false);
+        SceneStateManager.Instance.EnableRegularInput();
     }
     public void CloseMinimap()
     {
